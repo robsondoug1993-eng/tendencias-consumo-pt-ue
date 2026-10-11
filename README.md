@@ -26,7 +26,31 @@ Projeto de portfólio em análise e tratamento de dados, de ponta a ponta:
 
 - [Relatório (PDF)](entregaveis/Relatorio_Consumo_PT_UE.pdf) · [Word](entregaveis/Relatorio_Consumo_PT_UE.docx)
 - [Apresentação (PDF)](entregaveis/Apresentacao_Consumo_PT_UE.pdf) · [PowerPoint](entregaveis/Apresentacao_Consumo_PT_UE.pptx), com notas do apresentador
-- Dashboard Power BI: abrir `Tendencias_Consumo_PT_UE.pbip` no Power BI Desktop. Tem 6 páginas: Visão geral, Online, Canais, Estrutura, Preços e Perspetivas.
+- Dashboard Power BI: abrir `Tendencias_Consumo_PT_UE.pbip` no Power BI Desktop · [todas as páginas em PDF](entregaveis/Dashboard_Tendencias_Consumo_PT_UE.pdf)
+
+## Dashboard
+
+O dashboard tem 6 páginas. Nas páginas 1 a 5 há um filtro de país, sincronizado entre elas, para comparar qualquer Estado-membro com a UE27.
+
+**1. Visão geral:** indicadores principais, evolução das vendas por canal e compras online.
+![Visão geral](docs/dashboard/1_visao_geral.jpg)
+
+**2. Quem compra online:** perfil dos compradores, ranking europeu e categorias compradas.
+![Quem compra online](docs/dashboard/2_quem_compra_online.jpg)
+
+**3. Canais de venda:** comércio local, grandes superfícies e online.
+![Canais de venda](docs/dashboard/3_canais_de_venda.jpg)
+
+**4. Estrutura do retalho:** pequeno comércio x grandes empresas.
+![Estrutura do retalho](docs/dashboard/4_estrutura_do_retalho.jpg)
+
+**5. Preços e consumo das famílias**
+![Preços e consumo](docs/dashboard/5_precos_e_consumo.jpg)
+
+**6. Perspetivas 2026–2027:** previsão por canal e cenário de adoção do online.
+![Perspetivas](docs/dashboard/6_perspetivas.jpg)
+
+## Apresentação
 
 <p>
 <img src="docs/slides/05_expansao.jpg" width="49%">
@@ -43,7 +67,7 @@ Tendencias_Consumo_PT_UE.pbip            projeto Power BI
 Tendencias_Consumo_PT_UE.Report/         páginas e visuais (PBIR)
 Tendencias_Consumo_PT_UE.SemanticModel/  modelo semântico (TMDL)
 entregaveis/    relatório e apresentação
-docs/slides/    imagens dos slides
+docs/           imagens do dashboard e dos slides
 dados brutos/   (não versionado) ficheiros TSV do Eurostat
 ```
 

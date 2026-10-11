@@ -1,0 +1,89 @@
+table previsao_resumo_anual
+	lineageTag: cf39b96b-b236-432f-8eed-47234009fff0
+
+	column CO_GEO
+		dataType: string
+		lineageTag: 78257c28-a9b3-4133-af52-8452a70b582c
+		sourceColumn: CO_GEO
+
+	column NO_GEO
+		dataType: string
+		lineageTag: 77d82553-7ce7-421e-afa7-f1229313e431
+		sourceColumn: NO_GEO
+
+	column CO_NACE
+		dataType: string
+		lineageTag: 3e23ac32-9402-417f-9fff-92b2eb9a1220
+		sourceColumn: CO_NACE
+
+	column NO_CANAL
+		dataType: string
+		lineageTag: 0c2486d6-27a1-4a1f-9b4f-c48d4f86fd41
+		sourceColumn: NO_CANAL
+		sortByColumn: ORDEM_CANAL
+
+	column ORDEM_CANAL
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b643c257-b705-4779-8854-93230f7a451a
+		summarizeBy: none
+		sourceColumn: ORDEM_CANAL
+
+	column INDICADOR
+		dataType: string
+		lineageTag: 0fe32f9b-c945-4b35-b544-9df7cdfd0fa5
+		sourceColumn: INDICADOR
+
+	column CRESC_2025_PCT
+		dataType: double
+		lineageTag: 1f578a73-db7d-45d4-aaf9-4cb8ef0a95d5
+		summarizeBy: none
+		sourceColumn: CRESC_2025_PCT
+
+	column CRESC_2026_PCT
+		dataType: double
+		lineageTag: 966c164e-2c92-4fb6-889f-52bf1d892534
+		summarizeBy: none
+		sourceColumn: CRESC_2026_PCT
+
+	column CRESC_2026_P10
+		dataType: double
+		lineageTag: ff830f0c-d52e-45a6-97e1-7644321336f9
+		summarizeBy: none
+		sourceColumn: CRESC_2026_P10
+
+	column CRESC_2026_P90
+		dataType: double
+		lineageTag: 73dac1dd-b50f-49b1-898f-ec900d4065c1
+		summarizeBy: none
+		sourceColumn: CRESC_2026_P90
+
+	column CRESC_2027_PCT
+		dataType: double
+		lineageTag: a63dcacd-501b-48ea-bbaa-d632614b11ca
+		summarizeBy: none
+		sourceColumn: CRESC_2027_PCT
+
+	column CRESC_2027_P10
+		dataType: double
+		lineageTag: e1c9f18f-3ca5-4f62-87fb-04095ff1ab47
+		summarizeBy: none
+		sourceColumn: CRESC_2027_P10
+
+	column CRESC_2027_P90
+		dataType: double
+		lineageTag: e9f230a8-2829-4e23-8ea2-29fde0cfdcc4
+		summarizeBy: none
+		sourceColumn: CRESC_2027_P90
+
+	partition previsao_resumo_anual = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(PastaSaida & "previsao_resumo_anual.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalho, {{"CO_GEO", type text}, {"NO_GEO", type text}, {"CO_NACE", type text}, {"NO_CANAL", type text}, {"ORDEM_CANAL", Int64.Type}, {"INDICADOR", type text}, {"CRESC_2025_PCT", type number}, {"CRESC_2026_PCT", type number}, {"CRESC_2026_P10", type number}, {"CRESC_2026_P90", type number}, {"CRESC_2027_PCT", type number}, {"CRESC_2027_P10", type number}, {"CRESC_2027_P90", type number}}, "pt-PT")
+				in
+				    Tipos
+

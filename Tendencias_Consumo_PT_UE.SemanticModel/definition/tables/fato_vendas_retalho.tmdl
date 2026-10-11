@@ -1,0 +1,45 @@
+table fato_vendas_retalho
+	lineageTag: c201d2ac-4b98-4917-8c50-60f577c4393e
+
+	column DATA
+		dataType: dateTime
+		isHidden
+		formatString: dd/mm/yyyy
+		lineageTag: 11b7db50-2ec8-4fc6-a044-b49a2366a0d6
+		summarizeBy: none
+		sourceColumn: DATA
+
+	column CO_GEO
+		dataType: string
+		isHidden
+		lineageTag: a03a8b5d-e12c-4c8f-b6cb-3546e59a7451
+		sourceColumn: CO_GEO
+
+	column CO_NACE
+		dataType: string
+		isHidden
+		lineageTag: 9c3d564f-6e4b-4eda-a5c3-576b5358755b
+		sourceColumn: CO_NACE
+
+	column IDX_VOLUME
+		dataType: double
+		lineageTag: f3321807-b681-4578-a34d-c2eeaf0d1749
+		summarizeBy: none
+		sourceColumn: IDX_VOLUME
+
+	column IDX_VALOR
+		dataType: double
+		lineageTag: 61ff6578-d944-4542-aafa-798d08060959
+		summarizeBy: none
+		sourceColumn: IDX_VALOR
+
+	partition fato_vendas_retalho = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(PastaSaida & "fato_vendas_retalho.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalho, {{"DATA", type date}, {"CO_GEO", type text}, {"CO_NACE", type text}, {"IDX_VOLUME", type number}, {"IDX_VALOR", type number}}, "pt-PT")
+				in
+				    Tipos
+

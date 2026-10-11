@@ -1,0 +1,101 @@
+table fato_previsao
+	lineageTag: 330836fa-2f2d-4d73-841e-1ced28a2c6e8
+
+	column CO_GEO
+		dataType: string
+		lineageTag: b9da6e76-b358-46cb-96cc-a938db46f970
+		sourceColumn: CO_GEO
+
+	column NO_GEO
+		dataType: string
+		lineageTag: cea4ace6-705d-44f6-a443-508cec241a86
+		sourceColumn: NO_GEO
+
+	column CO_NACE
+		dataType: string
+		lineageTag: 3d84c72f-6df8-4fad-946b-366327116011
+		sourceColumn: CO_NACE
+
+	column NO_CANAL
+		dataType: string
+		lineageTag: 2e992de1-db7d-489f-aff2-c9bdc208171d
+		sourceColumn: NO_CANAL
+		sortByColumn: ORDEM_CANAL
+
+	column ORDEM_CANAL
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9fd6e8e6-ab3a-4c4f-81cd-ababf0ed8f12
+		summarizeBy: none
+		sourceColumn: ORDEM_CANAL
+
+	column INDICADOR
+		dataType: string
+		lineageTag: 6e46229d-56f9-4c88-8235-8bf3595d5c61
+		sourceColumn: INDICADOR
+
+	column AJUSTE
+		dataType: string
+		lineageTag: 6eb3a5ba-1828-491c-ada6-4877b4d02419
+		sourceColumn: AJUSTE
+
+	column MODELO
+		dataType: string
+		lineageTag: 897c0f43-7f19-4cf0-ad64-970e5e04f8ef
+		sourceColumn: MODELO
+
+	column DATA
+		dataType: dateTime
+		formatString: dd/mm/yyyy
+		lineageTag: 1eb2a4ba-b7eb-4307-b1f5-17fcb9521dea
+		summarizeBy: none
+		sourceColumn: DATA
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column TIPO
+		dataType: string
+		lineageTag: f9af7291-feb9-481f-bd20-519fd80abd36
+		sourceColumn: TIPO
+
+	column VALOR
+		dataType: double
+		lineageTag: ff387874-6d2f-4d1c-a486-2a4539b024c6
+		summarizeBy: none
+		sourceColumn: VALOR
+
+	column LIM95_INF
+		dataType: double
+		lineageTag: 360e0e3a-19d9-461a-8565-9db23f29ab6b
+		summarizeBy: none
+		sourceColumn: LIM95_INF
+
+	column LIM80_INF
+		dataType: double
+		lineageTag: 6d663247-1966-46dd-8282-7db96d17c8c8
+		summarizeBy: none
+		sourceColumn: LIM80_INF
+
+	column LIM80_SUP
+		dataType: double
+		lineageTag: 5c386b76-47d4-4b19-b0e9-0b233cf6e4bf
+		summarizeBy: none
+		sourceColumn: LIM80_SUP
+
+	column LIM95_SUP
+		dataType: double
+		lineageTag: 24dec179-9d34-47dd-996f-899c8f6fedf6
+		summarizeBy: none
+		sourceColumn: LIM95_SUP
+
+	partition fato_previsao = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(PastaSaida & "fato_previsao.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalho, {{"CO_GEO", type text}, {"NO_GEO", type text}, {"CO_NACE", type text}, {"NO_CANAL", type text}, {"ORDEM_CANAL", Int64.Type}, {"INDICADOR", type text}, {"AJUSTE", type text}, {"MODELO", type text}, {"DATA", type date}, {"TIPO", type text}, {"VALOR", type number}, {"LIM95_INF", type number}, {"LIM80_INF", type number}, {"LIM80_SUP", type number}, {"LIM95_SUP", type number}}, "pt-PT")
+				in
+				    Tipos
+

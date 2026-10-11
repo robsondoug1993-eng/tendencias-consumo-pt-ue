@@ -1,0 +1,24 @@
+﻿CO_PERFIL;NO_PERFIL;GRUPO;ORDEM
+IND_TOTAL;Todos (16-74 anos);Total;1
+Y16_24;16-24 anos;Idade;11
+Y25_34;25-34 anos;Idade;12
+Y35_44;35-44 anos;Idade;13
+Y45_54;45-54 anos;Idade;14
+Y55_64;55-64 anos;Idade;15
+Y65_74;65-74 anos;Idade;16
+M_Y16_74;Homens;Sexo;21
+F_Y16_74;Mulheres;Sexo;22
+I0_2;Escolaridade baixa (até 9º ano);Escolaridade;31
+I3_4;Escolaridade média (secundário);Escolaridade;32
+I5_8;Ensino superior;Escolaridade;33
+IND_DEG1;Cidades;Urbanização;41
+IND_DEG2;Vilas e subúrbios;Urbanização;42
+IND_DEG3;Zonas rurais;Urbanização;43
+HHI_Q1;Rendimento 1º quartil (mais baixo);Rendimento do agregado;51
+HHI_Q2;Rendimento 2º quartil;Rendimento do agregado;52
+HHI_Q3;Rendimento 3º quartil;Rendimento do agregado;53
+HHI_Q4;Rendimento 4º quartil (mais alto);Rendimento do agregado;54
+SAL_SELF_FAM;Empregados;Situação profissional;61
+UNE;Desempregados;Situação profissional;62
+STUD;Estudantes;Situação profissional;63
+RETIR_OTHER;Reformados e outros inativos;Situação profissional;64

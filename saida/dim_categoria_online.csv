@@ -1,0 +1,25 @@
+﻿CO_CATEGORIA;NO_CATEGORIA;TIPO;ORDEM
+I_BPG_ANY;Qualquer bem físico;Total bens;1
+I_BCLOT1;Roupa, calçado e acessórios;Bens;10
+I_BSPG;Artigos de desporto;Bens;11
+I_BCG;Brinquedos e artigos para crianças;Bens;12
+I_BFURN1;Mobiliário, decoração e jardim;Bens;13
+I_BMUSG;Música em CD/vinil;Bens;14
+I_BFLMG;Filmes e séries em DVD/Blu-ray;Bens;15
+I_BBOOKNLG;Livros, revistas e jornais impressos;Bens;16
+I_BHARD1;Computadores, telemóveis e acessórios;Bens;17
+I_BEEQU1;Eletrónica e eletrodomésticos;Bens;18
+I_BMED1;Medicamentos e suplementos;Bens;19
+I_BFDR;Entregas de restaurantes e fast-food;Bens;20
+I_BFDS;Alimentação e bebidas de lojas;Bens;21
+I_BCBW;Cosmética, beleza e bem-estar;Bens;22
+I_BCPH;Limpeza e higiene pessoal;Bens;23
+I_BBMC;Veículos e peças;Bens;24
+I_BOPG;Outros bens físicos;Bens;25
+I_BRA;Alojamento;Serviços;30
+I_BTPS;Serviços de transporte;Serviços;31
+I_BCTICK;Bilhetes para eventos culturais;Serviços;32
+I_BSTICK;Bilhetes para eventos desportivos;Serviços;33
+I_BHHS;Serviços domésticos (limpeza, reparações...);Serviços;34
+I_BSIMC;Internet e telemóvel (assinaturas);Serviços;35
+I_BSUTIL;Eletricidade, água e gás (contratos);Serviços;36

@@ -1,0 +1,19 @@
+﻿CO_NACE;NO_ATIVIDADE;CANAL;NIVEL;ORDEM
+G47;Comércio a retalho (total);Total;1;1
+G47_X_G473;Retalho exceto combustíveis;Total;1;2
+G47_FOOD;Retalho alimentar;Agregado por produto;2;3
+G47_NFOOD;Retalho não alimentar;Agregado por produto;2;4
+G47_NF_CLTH;Vestuário e calçado;Agregado por produto;3;5
+G47_NF_HLTH;Saúde e cosmética;Agregado por produto;3;6
+G471;Lojas não especializadas;Grandes superfícies;2;10
+G4711;Super e hipermercados;Grandes superfícies;3;11
+G4719;Lojas de departamento;Grandes superfícies;3;12
+G472;Comércio alimentar especializado;Comércio especializado;2;20
+G473;Combustíveis;Combustíveis;2;21
+G474;Informática e telecomunicações;Comércio especializado;2;22
+G475;Equipamento para o lar;Comércio especializado;2;23
+G476;Bens culturais e recreativos;Comércio especializado;2;24
+G477;Outras lojas especializadas;Comércio especializado;2;25
+G478;Bancas e mercados;Mercados e feiras;2;30
+G479;Fora de loja (total);Fora de loja;2;40
+G4791;Online (internet e correspondência);Online;3;41

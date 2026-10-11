@@ -1,0 +1,37 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "p6_fonte",
+  "position": {
+    "x": 24,
+    "y": 1044,
+    "z": 99,
+    "height": 30,
+    "width": 1872,
+    "tabOrder": 99
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Previsão: para cada série escolhe-se o modelo com menor erro (MAPE) no teste set/2025–ago/2026 entre suavização exponencial (ETS), autorregressivo (AR) e ingénuo. Erro do retalho total: 0,7%; online: 4,7%. Faixas = intervalo de 80%. Meses de confinamento tratados como atípicos. Fonte: Eurostat sts_trtu_m, isoc_ec_ibuy/ib20.",
+                    "textStyle": {
+                      "fontSize": "9pt",
+                      "color": "#6B7280"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

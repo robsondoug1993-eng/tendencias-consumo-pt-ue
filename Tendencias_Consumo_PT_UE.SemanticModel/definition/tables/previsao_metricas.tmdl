@@ -1,0 +1,59 @@
+table previsao_metricas
+	lineageTag: ad1e803b-3b53-4061-b782-885cf5c6c2b2
+
+	column CO_GEO
+		dataType: string
+		lineageTag: 2b25b70b-1758-4669-a8d0-fd5ab47655e5
+		sourceColumn: CO_GEO
+
+	column NO_GEO
+		dataType: string
+		lineageTag: 0ca184f1-da91-499a-bd7a-641469f5d84d
+		sourceColumn: NO_GEO
+
+	column CO_NACE
+		dataType: string
+		lineageTag: 77181a83-544d-4658-b9c9-f3819495ee4d
+		sourceColumn: CO_NACE
+
+	column NO_CANAL
+		dataType: string
+		lineageTag: e47c77b2-69b1-4a34-a2fe-9e7856c8baf6
+		sourceColumn: NO_CANAL
+
+	column INDICADOR
+		dataType: string
+		lineageTag: d16cca0b-dfc8-4aa5-88b3-cd1ce5789a71
+		sourceColumn: INDICADOR
+
+	column AJUSTE
+		dataType: string
+		lineageTag: f075e093-d730-40a9-b457-020efb49b5e2
+		sourceColumn: AJUSTE
+
+	column MODELO
+		dataType: string
+		lineageTag: 2421309f-4439-4961-b158-34cc0bfd4c24
+		sourceColumn: MODELO
+
+	column MAPE_PCT
+		dataType: double
+		lineageTag: 0e3e7272-7998-4b87-a1a4-cc665e81122b
+		summarizeBy: none
+		sourceColumn: MAPE_PCT
+
+	column ESCOLHIDO
+		dataType: string
+		lineageTag: 4942d527-3db8-4c2f-a7f4-420c33f4ea20
+		sourceColumn: ESCOLHIDO
+
+	partition previsao_metricas = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(PastaSaida & "previsao_metricas.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalho, {{"CO_GEO", type text}, {"NO_GEO", type text}, {"CO_NACE", type text}, {"NO_CANAL", type text}, {"INDICADOR", type text}, {"AJUSTE", type text}, {"MODELO", type text}, {"MAPE_PCT", type number}, {"ESCOLHIDO", type text}}, "pt-PT")
+				in
+				    Tipos
+

@@ -1,0 +1,36 @@
+table dim_perfil
+	lineageTag: 8eb03523-b325-418b-800d-e51e51841e4d
+
+	column CO_PERFIL
+		dataType: string
+		lineageTag: 9f9cefe5-9896-4eb8-a74e-e2e419d11a45
+		sourceColumn: CO_PERFIL
+
+	column NO_PERFIL
+		dataType: string
+		lineageTag: 46fde51b-2bdf-4e98-89ff-19becc014da3
+		sourceColumn: NO_PERFIL
+		sortByColumn: ORDEM
+
+	column GRUPO
+		dataType: string
+		lineageTag: 25fff30e-388b-47d3-96c8-0b0d7c08dbd3
+		sourceColumn: GRUPO
+
+	column ORDEM
+		dataType: int64
+		isHidden
+		lineageTag: c8c8743c-7d8c-42c4-a1a4-3ea6e22106a1
+		summarizeBy: none
+		sourceColumn: ORDEM
+
+	partition dim_perfil = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(PastaSaida & "dim_perfil.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalho, {{"CO_PERFIL", type text}, {"NO_PERFIL", type text}, {"GRUPO", type text}, {"ORDEM", Int64.Type}}, "pt-PT")
+				in
+				    Tipos
+

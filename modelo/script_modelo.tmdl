@@ -1,0 +1,931 @@
+createOrReplace
+
+	expression PastaSaida = "C:\Users\Robson\Desktop\Projetos\Tendencias_Consumo_PT_UE\saida\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+
+	table dim_ano
+
+		column ANO
+			dataType: int64
+			summarizeBy: none
+			formatString: 0
+			sourceColumn: ANO
+
+		column FASE
+			dataType: string
+			sourceColumn: FASE
+
+		partition dim_ano = m
+			mode: import
+			source =
+					let
+					    Fonte = Csv.Document(File.Contents(PastaSaida & "dim_ano.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+					    Tipos = Table.TransformColumnTypes(Cabecalho, {{"ANO", Int64.Type}, {"FASE", type text}}, "pt-PT")
+					in
+					    Tipos
+
+	table dim_tempo
+
+		column DATA
+			dataType: dateTime
+			formatString: dd/mm/yyyy
+			summarizeBy: none
+			sourceColumn: DATA
+
+		column ANO
+			dataType: int64
+			summarizeBy: none
+			formatString: 0
+			sourceColumn: ANO
+
+		column MES
+			dataType: int64
+			summarizeBy: none
+			sourceColumn: MES
+
+		column NOME_MES
+			dataType: string
+			sortByColumn: MES
+			sourceColumn: NOME_MES
+
+		column TRIMESTRE
+			dataType: string
+			sourceColumn: TRIMESTRE
+
+		column SEMESTRE
+			dataType: string
+			sourceColumn: SEMESTRE
+
+		partition dim_tempo = m
+			mode: import
+			source =
+					let
+					    Fonte = Csv.Document(File.Contents(PastaSaida & "dim_tempo.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+					    Tipos = Table.TransformColumnTypes(Cabecalho, {{"DATA", type date}, {"ANO", Int64.Type}, {"MES", Int64.Type}, {"NOME_MES", type text}, {"TRIMESTRE", type text}, {"SEMESTRE", type text}}, "pt-PT")
+					in
+					    Tipos
+
+	table dim_pais
+
+		column CO_GEO
+			dataType: string
+			sourceColumn: CO_GEO
+
+		column NO_PAIS
+			dataType: string
+			sourceColumn: NO_PAIS
+
+		column ISO3
+			dataType: string
+			sourceColumn: ISO3
+
+		column ZONA_EURO
+			dataType: string
+			sourceColumn: ZONA_EURO
+
+		column TIPO
+			dataType: string
+			sourceColumn: TIPO
+
+		column DESTAQUE
+			dataType: string
+			sourceColumn: DESTAQUE
+
+		partition dim_pais = m
+			mode: import
+			source =
+					let
+					    Fonte = Csv.Document(File.Contents(PastaSaida & "dim_pais.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+					    Tipos = Table.TransformColumnTypes(Cabecalho, {{"CO_GEO", type text}, {"NO_PAIS", type text}, {"ISO3", type text}, {"ZONA_EURO", type text}, {"TIPO", type text}, {"DESTAQUE", type text}}, "pt-PT")
+					in
+					    Tipos
+
+	table dim_atividade
+
+		column CO_NACE
+			dataType: string
+			sourceColumn: CO_NACE
+
+		column NO_ATIVIDADE
+			dataType: string
+			sortByColumn: ORDEM
+			sourceColumn: NO_ATIVIDADE
+
+		column CANAL
+			dataType: string
+			sourceColumn: CANAL
+
+		column NIVEL
+			dataType: int64
+			summarizeBy: none
+			sourceColumn: NIVEL
+
+		column ORDEM
+			dataType: int64
+			summarizeBy: none
+			isHidden
+			sourceColumn: ORDEM
+
+		partition dim_atividade = m
+			mode: import
+			source =
+					let
+					    Fonte = Csv.Document(File.Contents(PastaSaida & "dim_atividade.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+					    Tipos = Table.TransformColumnTypes(Cabecalho, {{"CO_NACE", type text}, {"NO_ATIVIDADE", type text}, {"CANAL", type text}, {"NIVEL", Int64.Type}, {"ORDEM", Int64.Type}}, "pt-PT")
+					in
+					    Tipos
+
+	table dim_perfil
+
+		column CO_PERFIL
+			dataType: string
+			sourceColumn: CO_PERFIL
+
+		column NO_PERFIL
+			dataType: string
+			sortByColumn: ORDEM
+			sourceColumn: NO_PERFIL
+
+		column GRUPO
+			dataType: string
+			sourceColumn: GRUPO
+
+		column ORDEM
+			dataType: int64
+			summarizeBy: none
+			isHidden
+			sourceColumn: ORDEM
+
+		partition dim_perfil = m
+			mode: import
+			source =
+					let
+					    Fonte = Csv.Document(File.Contents(PastaSaida & "dim_perfil.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+					    Tipos = Table.TransformColumnTypes(Cabecalho, {{"CO_PERFIL", type text}, {"NO_PERFIL", type text}, {"GRUPO", type text}, {"ORDEM", Int64.Type}}, "pt-PT")
+					in
+					    Tipos
+
+	table dim_categoria_online
+
+		column CO_CATEGORIA
+			dataType: string
+			sourceColumn: CO_CATEGORIA
+
+		column NO_CATEGORIA
+			dataType: string
+			sortByColumn: ORDEM
+			sourceColumn: NO_CATEGORIA
+
+		column TIPO
+			dataType: string
+			sourceColumn: TIPO
+
+		column ORDEM
+			dataType: int64
+			summarizeBy: none
+			isHidden
+			sourceColumn: ORDEM
+
+		partition dim_categoria_online = m
+			mode: import
+			source =
+					let
+					    Fonte = Csv.Document(File.Contents(PastaSaida & "dim_categoria_online.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+					    Tipos = Table.TransformColumnTypes(Cabecalho, {{"CO_CATEGORIA", type text}, {"NO_CATEGORIA", type text}, {"TIPO", type text}, {"ORDEM", Int64.Type}}, "pt-PT")
+					in
+					    Tipos
+
+	table dim_dimensao_empresa
+
+		column CO_DIMENSAO
+			dataType: string
+			sourceColumn: CO_DIMENSAO
+
+		column NO_DIMENSAO
+			dataType: string
+			sortByColumn: ORDEM
+			sourceColumn: NO_DIMENSAO
+
+		column ORDEM
+			dataType: int64
+			summarizeBy: none
+			isHidden
+			sourceColumn: ORDEM
+
+		partition dim_dimensao_empresa = m
+			mode: import
+			source =
+					let
+					    Fonte = Csv.Document(File.Contents(PastaSaida & "dim_dimensao_empresa.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+					    Tipos = Table.TransformColumnTypes(Cabecalho, {{"CO_DIMENSAO", type text}, {"NO_DIMENSAO", type text}, {"ORDEM", Int64.Type}}, "pt-PT")
+					in
+					    Tipos
+
+	table dim_coicop
+
+		column CO_COICOP
+			dataType: string
+			sourceColumn: CO_COICOP
+
+		column NO_COICOP
+			dataType: string
+			sortByColumn: ORDEM
+			sourceColumn: NO_COICOP
+
+		column ORDEM
+			dataType: int64
+			summarizeBy: none
+			isHidden
+			sourceColumn: ORDEM
+
+		partition dim_coicop = m
+			mode: import
+			source =
+					let
+					    Fonte = Csv.Document(File.Contents(PastaSaida & "dim_coicop.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+					    Tipos = Table.TransformColumnTypes(Cabecalho, {{"CO_COICOP", type text}, {"NO_COICOP", type text}, {"ORDEM", Int64.Type}}, "pt-PT")
+					in
+					    Tipos
+
+	table fato_vendas_retalho
+
+		column DATA
+			dataType: dateTime
+			formatString: dd/mm/yyyy
+			summarizeBy: none
+			isHidden
+			sourceColumn: DATA
+
+		column CO_GEO
+			dataType: string
+			isHidden
+			sourceColumn: CO_GEO
+
+		column CO_NACE
+			dataType: string
+			isHidden
+			sourceColumn: CO_NACE
+
+		column IDX_VOLUME
+			dataType: double
+			summarizeBy: none
+			sourceColumn: IDX_VOLUME
+
+		column IDX_VALOR
+			dataType: double
+			summarizeBy: none
+			sourceColumn: IDX_VALOR
+
+		partition fato_vendas_retalho = m
+			mode: import
+			source =
+					let
+					    Fonte = Csv.Document(File.Contents(PastaSaida & "fato_vendas_retalho.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+					    Tipos = Table.TransformColumnTypes(Cabecalho, {{"DATA", type date}, {"CO_GEO", type text}, {"CO_NACE", type text}, {"IDX_VOLUME", type number}, {"IDX_VALOR", type number}}, "pt-PT")
+					in
+					    Tipos
+
+	table fato_compras_online
+
+		column ANO
+			dataType: int64
+			summarizeBy: none
+			formatString: 0
+			isHidden
+			sourceColumn: ANO
+
+		column CO_GEO
+			dataType: string
+			isHidden
+			sourceColumn: CO_GEO
+
+		column CO_PERFIL
+			dataType: string
+			isHidden
+			sourceColumn: CO_PERFIL
+
+		column PCT_COMPROU_3M
+			dataType: double
+			summarizeBy: none
+			sourceColumn: PCT_COMPROU_3M
+
+		column PCT_COMPROU_12M
+			dataType: double
+			summarizeBy: none
+			sourceColumn: PCT_COMPROU_12M
+
+		column SERIE
+			dataType: string
+			sourceColumn: SERIE
+
+		partition fato_compras_online = m
+			mode: import
+			source =
+					let
+					    Fonte = Csv.Document(File.Contents(PastaSaida & "fato_compras_online.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+					    Tipos = Table.TransformColumnTypes(Cabecalho, {{"ANO", Int64.Type}, {"CO_GEO", type text}, {"CO_PERFIL", type text}, {"PCT_COMPROU_3M", type number}, {"PCT_COMPROU_12M", type number}, {"SERIE", type text}}, "pt-PT")
+					in
+					    Tipos
+
+	table fato_categorias_online
+
+		column ANO
+			dataType: int64
+			summarizeBy: none
+			formatString: 0
+			isHidden
+			sourceColumn: ANO
+
+		column CO_GEO
+			dataType: string
+			isHidden
+			sourceColumn: CO_GEO
+
+		column CO_PERFIL
+			dataType: string
+			isHidden
+			sourceColumn: CO_PERFIL
+
+		column CO_CATEGORIA
+			dataType: string
+			isHidden
+			sourceColumn: CO_CATEGORIA
+
+		column PCT_INDIVIDUOS
+			dataType: double
+			summarizeBy: none
+			sourceColumn: PCT_INDIVIDUOS
+
+		column PCT_COMPRADORES
+			dataType: double
+			summarizeBy: none
+			sourceColumn: PCT_COMPRADORES
+
+		partition fato_categorias_online = m
+			mode: import
+			source =
+					let
+					    Fonte = Csv.Document(File.Contents(PastaSaida & "fato_categorias_online.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+					    Tipos = Table.TransformColumnTypes(Cabecalho, {{"ANO", Int64.Type}, {"CO_GEO", type text}, {"CO_PERFIL", type text}, {"CO_CATEGORIA", type text}, {"PCT_INDIVIDUOS", type number}, {"PCT_COMPRADORES", type number}}, "pt-PT")
+					in
+					    Tipos
+
+	table fato_estrutura_retalho
+
+		column ANO
+			dataType: int64
+			summarizeBy: none
+			formatString: 0
+			isHidden
+			sourceColumn: ANO
+
+		column CO_GEO
+			dataType: string
+			isHidden
+			sourceColumn: CO_GEO
+
+		column CO_NACE
+			dataType: string
+			isHidden
+			sourceColumn: CO_NACE
+
+		column CO_DIMENSAO
+			dataType: string
+			isHidden
+			sourceColumn: CO_DIMENSAO
+
+		column N_EMPRESAS
+			dataType: int64
+			summarizeBy: none
+			sourceColumn: N_EMPRESAS
+
+		column N_PESSOAS
+			dataType: int64
+			summarizeBy: none
+			sourceColumn: N_PESSOAS
+
+		column VOLUME_NEGOCIOS_MEUR
+			dataType: double
+			summarizeBy: none
+			sourceColumn: VOLUME_NEGOCIOS_MEUR
+
+		column SERIE
+			dataType: string
+			sourceColumn: SERIE
+
+		partition fato_estrutura_retalho = m
+			mode: import
+			source =
+					let
+					    Fonte = Csv.Document(File.Contents(PastaSaida & "fato_estrutura_retalho.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+					    Tipos = Table.TransformColumnTypes(Cabecalho, {{"ANO", Int64.Type}, {"CO_GEO", type text}, {"CO_NACE", type text}, {"CO_DIMENSAO", type text}, {"N_EMPRESAS", Int64.Type}, {"N_PESSOAS", Int64.Type}, {"VOLUME_NEGOCIOS_MEUR", type number}, {"SERIE", type text}}, "pt-PT")
+					in
+					    Tipos
+
+	table fato_inflacao
+
+		column ANO
+			dataType: int64
+			summarizeBy: none
+			formatString: 0
+			isHidden
+			sourceColumn: ANO
+
+		column CO_GEO
+			dataType: string
+			isHidden
+			sourceColumn: CO_GEO
+
+		column CO_COICOP
+			dataType: string
+			isHidden
+			sourceColumn: CO_COICOP
+
+		column TAXA_INFLACAO_PCT
+			dataType: double
+			summarizeBy: none
+			sourceColumn: TAXA_INFLACAO_PCT
+
+		column INDICE_2015
+			dataType: double
+			summarizeBy: none
+			sourceColumn: INDICE_2015
+
+		partition fato_inflacao = m
+			mode: import
+			source =
+					let
+					    Fonte = Csv.Document(File.Contents(PastaSaida & "fato_inflacao.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+					    Tipos = Table.TransformColumnTypes(Cabecalho, {{"ANO", Int64.Type}, {"CO_GEO", type text}, {"CO_COICOP", type text}, {"TAXA_INFLACAO_PCT", type number}, {"INDICE_2015", type number}}, "pt-PT")
+					in
+					    Tipos
+
+	table fato_consumo_familias
+
+		column ANO
+			dataType: int64
+			summarizeBy: none
+			formatString: 0
+			isHidden
+			sourceColumn: ANO
+
+		column CO_GEO
+			dataType: string
+			isHidden
+			sourceColumn: CO_GEO
+
+		column CO_COICOP
+			dataType: string
+			isHidden
+			sourceColumn: CO_COICOP
+
+		column DESPESA_MEUR
+			dataType: double
+			summarizeBy: none
+			sourceColumn: DESPESA_MEUR
+
+		column PESO_PCT
+			dataType: double
+			summarizeBy: none
+			sourceColumn: PESO_PCT
+
+		column VAR_REAL_PCT
+			dataType: double
+			summarizeBy: none
+			sourceColumn: VAR_REAL_PCT
+
+		column DESPESA_EUR_HAB
+			dataType: double
+			summarizeBy: none
+			sourceColumn: DESPESA_EUR_HAB
+
+		partition fato_consumo_familias = m
+			mode: import
+			source =
+					let
+					    Fonte = Csv.Document(File.Contents(PastaSaida & "fato_consumo_familias.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+					    Tipos = Table.TransformColumnTypes(Cabecalho, {{"ANO", Int64.Type}, {"CO_GEO", type text}, {"CO_COICOP", type text}, {"DESPESA_MEUR", type number}, {"PESO_PCT", type number}, {"VAR_REAL_PCT", type number}, {"DESPESA_EUR_HAB", type number}}, "pt-PT")
+					in
+					    Tipos
+
+	table _Medidas
+
+		measure 'Índice de volume' =
+				-- Média do índice de volume (base 2021). Sem atividade filtrada, usa o retalho total (G47).
+				IF (
+				    ISFILTERED ( dim_atividade ),
+				    AVERAGE ( fato_vendas_retalho[IDX_VOLUME] ),
+				    CALCULATE ( AVERAGE ( fato_vendas_retalho[IDX_VOLUME] ), dim_atividade[CO_NACE] = "G47" )
+				)
+			formatString: 0.0
+			displayFolder: 1. Vendas do retalho
+
+		measure 'Índice de valor' =
+				IF (
+				    ISFILTERED ( dim_atividade ),
+				    AVERAGE ( fato_vendas_retalho[IDX_VALOR] ),
+				    CALCULATE ( AVERAGE ( fato_vendas_retalho[IDX_VALOR] ), dim_atividade[CO_NACE] = "G47" )
+				)
+			formatString: 0.0
+			displayFolder: 1. Vendas do retalho
+
+		measure 'Variação de preços desde 2021 %' =
+				-- Valor / volume: quanto do crescimento em euros é só preço (deflator implícito).
+				DIVIDE ( [Índice de valor], [Índice de volume] ) - 1
+			formatString: 0.0%
+			displayFolder: 1. Vendas do retalho
+
+		measure 'Volume vs 2019 %' =
+				-- Compara com a média de 2019 (último ano antes da pandemia).
+				VAR base =
+				    CALCULATE ( [Índice de volume], REMOVEFILTERS ( dim_tempo ), REMOVEFILTERS ( dim_ano ), dim_ano[ANO] = 2019 )
+				RETURN
+				    IF ( NOT ISBLANK ( base ), DIVIDE ( [Índice de volume], base ) - 1 )
+			formatString: +0.0%;-0.0%;0.0%
+			displayFolder: 1. Vendas do retalho
+
+		measure 'Volume var. homóloga %' =
+				-- Mesmo(s) mês(es) do ano anterior; funciona para mês, trimestre ou ano.
+				VAR datasAnt =
+				    SELECTCOLUMNS ( VALUES ( dim_tempo[DATA] ), "DataAnt", EDATE ( dim_tempo[DATA], -12 ) )
+				VAR ant =
+				    CALCULATE ( [Índice de volume], REMOVEFILTERS ( dim_tempo ), REMOVEFILTERS ( dim_ano ), TREATAS ( datasAnt, dim_tempo[DATA] ) )
+				RETURN
+				    IF ( NOT ISBLANK ( ant ), DIVIDE ( [Índice de volume], ant ) - 1 )
+			formatString: +0.0%;-0.0%;0.0%
+			displayFolder: 1. Vendas do retalho
+
+		measure 'Volume · Online' =
+				CALCULATE ( [Índice de volume], dim_atividade[CO_NACE] = "G4791" )
+			formatString: 0.0
+			displayFolder: 1. Vendas do retalho\Por canal
+
+		measure 'Volume · Retalho total' =
+				CALCULATE ( [Índice de volume], dim_atividade[CO_NACE] = "G47" )
+			formatString: 0.0
+			displayFolder: 1. Vendas do retalho\Por canal
+
+		measure 'Volume · Super e hipermercados' =
+				CALCULATE ( [Índice de volume], dim_atividade[CO_NACE] = "G4711" )
+			formatString: 0.0
+			displayFolder: 1. Vendas do retalho\Por canal
+
+		measure 'Volume · Comércio alimentar especializado' =
+				CALCULATE ( [Índice de volume], dim_atividade[CO_NACE] = "G472" )
+			formatString: 0.0
+			displayFolder: 1. Vendas do retalho\Por canal
+
+		measure 'Volume · Mercados e feiras' =
+				CALCULATE ( [Índice de volume], dim_atividade[CO_NACE] = "G478" )
+			formatString: 0.0
+			displayFolder: 1. Vendas do retalho\Por canal
+
+		measure 'Online vs retalho desde 2019 (pp)' =
+				-- Quantos pontos percentuais o online cresceu acima (ou abaixo) do retalho total desde 2019.
+				(
+				    CALCULATE ( [Volume vs 2019 %], dim_atividade[CO_NACE] = "G4791" )
+				        - CALCULATE ( [Volume vs 2019 %], dim_atividade[CO_NACE] = "G47" )
+				) * 100
+			formatString: +0.0;-0.0;0.0
+			displayFolder: 1. Vendas do retalho\Por canal
+
+		measure '% comprou online (12 meses)' =
+				-- % de pessoas (16-74) com compra online nos últimos 12 meses. Sem perfil filtrado, usa o total.
+				IF (
+				    ISFILTERED ( dim_perfil ),
+				    AVERAGE ( fato_compras_online[PCT_COMPROU_12M] ),
+				    CALCULATE ( AVERAGE ( fato_compras_online[PCT_COMPROU_12M] ), dim_perfil[CO_PERFIL] = "IND_TOTAL" )
+				) / 100
+			formatString: 0.0%
+			displayFolder: 2. Compras online
+
+		measure '% comprou online (3 meses)' =
+				IF (
+				    ISFILTERED ( dim_perfil ),
+				    AVERAGE ( fato_compras_online[PCT_COMPROU_3M] ),
+				    CALCULATE ( AVERAGE ( fato_compras_online[PCT_COMPROU_3M] ), dim_perfil[CO_PERFIL] = "IND_TOTAL" )
+				) / 100
+			formatString: 0.0%
+			displayFolder: 2. Compras online
+
+		measure '% online · Portugal' =
+				CALCULATE ( [% comprou online (12 meses)], REMOVEFILTERS ( dim_pais ), dim_pais[CO_GEO] = "PT" )
+			formatString: 0.0%
+			displayFolder: 2. Compras online
+
+		measure '% online · UE27' =
+				CALCULATE ( [% comprou online (12 meses)], REMOVEFILTERS ( dim_pais ), dim_pais[CO_GEO] = "EU27_2020" )
+			formatString: 0.0%
+			displayFolder: 2. Compras online
+
+		measure 'Diferença PT vs UE (pp)' =
+				( [% online · Portugal] - [% online · UE27] ) * 100
+			formatString: +0.0;-0.0;0.0
+			displayFolder: 2. Compras online
+
+		measure 'Online var. vs ano anterior (pp)' =
+				VAR a = MAX ( dim_ano[ANO] )
+				VAR ant =
+				    CALCULATE ( [% comprou online (12 meses)], REMOVEFILTERS ( dim_ano ), dim_ano[ANO] = a - 1 )
+				RETURN
+				    IF ( NOT ISBLANK ( ant ), ( [% comprou online (12 meses)] - ant ) * 100 )
+			formatString: +0.0;-0.0;0.0
+			displayFolder: 2. Compras online
+
+		measure 'Ranking UE · compras online' =
+				-- Posição do país selecionado entre os 27 (1 = mais compras online).
+				IF (
+				    HASONEVALUE ( dim_pais[CO_GEO] ) && SELECTEDVALUE ( dim_pais[TIPO] ) = "País",
+				    RANKX (
+				        FILTER ( ALL ( dim_pais ), dim_pais[TIPO] = "País" ),
+				        [% comprou online (12 meses)], , DESC, Dense
+				    )
+				)
+			formatString: 0
+			displayFolder: 2. Compras online
+
+		measure '% pessoas que compraram (categoria)' =
+				-- % de todas as pessoas que compraram a categoria online nos últimos 3 meses.
+				IF (
+				    ISFILTERED ( dim_perfil ),
+				    AVERAGE ( fato_categorias_online[PCT_INDIVIDUOS] ),
+				    CALCULATE ( AVERAGE ( fato_categorias_online[PCT_INDIVIDUOS] ), dim_perfil[CO_PERFIL] = "IND_TOTAL" )
+				) / 100
+			formatString: 0.0%
+			displayFolder: 3. Categorias online
+
+		measure '% dos compradores online (categoria)' =
+				-- Entre quem comprou online nos últimos 3 meses, % que comprou a categoria.
+				IF (
+				    ISFILTERED ( dim_perfil ),
+				    AVERAGE ( fato_categorias_online[PCT_COMPRADORES] ),
+				    CALCULATE ( AVERAGE ( fato_categorias_online[PCT_COMPRADORES] ), dim_perfil[CO_PERFIL] = "IND_TOTAL" )
+				) / 100
+			formatString: 0.0%
+			displayFolder: 3. Categorias online
+
+		measure '% pessoas · último ano disponível' =
+				-- Os bens são inquiridos até 2024 e alguns serviços só em anos alternados:
+				-- usa o último ano com dado dentro do período filtrado, categoria a categoria.
+				VAR ult = MAX ( fato_categorias_online[ANO] )
+				RETURN
+				    CALCULATE ( [% pessoas que compraram (categoria)], REMOVEFILTERS ( dim_ano ), dim_ano[ANO] = ult )
+			formatString: 0.0%
+			displayFolder: 3. Categorias online
+
+		measure 'Nº de empresas' =
+				-- Sem atividade filtrada, usa o retalho total (G47) para não somar níveis diferentes.
+				IF (
+				    ISFILTERED ( dim_atividade ),
+				    SUM ( fato_estrutura_retalho[N_EMPRESAS] ),
+				    CALCULATE ( SUM ( fato_estrutura_retalho[N_EMPRESAS] ), dim_atividade[CO_NACE] = "G47" )
+				)
+			formatString: #,##0
+			displayFolder: 4. Estrutura do retalho
+
+		measure 'Pessoas ao serviço' =
+				IF (
+				    ISFILTERED ( dim_atividade ),
+				    SUM ( fato_estrutura_retalho[N_PESSOAS] ),
+				    CALCULATE ( SUM ( fato_estrutura_retalho[N_PESSOAS] ), dim_atividade[CO_NACE] = "G47" )
+				)
+			formatString: #,##0
+			displayFolder: 4. Estrutura do retalho
+
+		measure 'Volume de negócios (M€)' =
+				IF (
+				    ISFILTERED ( dim_atividade ),
+				    SUM ( fato_estrutura_retalho[VOLUME_NEGOCIOS_MEUR] ),
+				    CALCULATE ( SUM ( fato_estrutura_retalho[VOLUME_NEGOCIOS_MEUR] ), dim_atividade[CO_NACE] = "G47" )
+				)
+			formatString: #,##0
+			displayFolder: 4. Estrutura do retalho
+
+		measure '% das empresas' =
+				DIVIDE ( [Nº de empresas], CALCULATE ( [Nº de empresas], REMOVEFILTERS ( dim_dimensao_empresa ) ) )
+			formatString: 0.0%
+			displayFolder: 4. Estrutura do retalho
+
+		measure '% do volume de negócios' =
+				DIVIDE ( [Volume de negócios (M€)], CALCULATE ( [Volume de negócios (M€)], REMOVEFILTERS ( dim_dimensao_empresa ) ) )
+			formatString: 0.0%
+			displayFolder: 4. Estrutura do retalho
+
+		measure '% das pessoas ao serviço' =
+				DIVIDE ( [Pessoas ao serviço], CALCULATE ( [Pessoas ao serviço], REMOVEFILTERS ( dim_dimensao_empresa ) ) )
+			formatString: 0.0%
+			displayFolder: 4. Estrutura do retalho
+
+		measure 'Volume de negócios por empresa (mil €)' =
+				DIVIDE ( [Volume de negócios (M€)] * 1000, [Nº de empresas] )
+			formatString: #,##0
+			displayFolder: 4. Estrutura do retalho
+
+		measure 'Quota das grandes empresas no VN %' =
+				CALCULATE ( [% do volume de negócios], dim_dimensao_empresa[CO_DIMENSAO] = "GRANDE" )
+			formatString: 0.0%
+			displayFolder: 4. Estrutura do retalho
+
+		measure 'Quota das microempresas no VN %' =
+				CALCULATE ( [% do volume de negócios], dim_dimensao_empresa[CO_DIMENSAO] = "MICRO" )
+			formatString: 0.0%
+			displayFolder: 4. Estrutura do retalho
+
+		measure 'Nº de empresas vs 2010 %' =
+				VAR base =
+				    CALCULATE ( [Nº de empresas], REMOVEFILTERS ( dim_ano ), dim_ano[ANO] = 2010 )
+				RETURN
+				    IF ( NOT ISBLANK ( base ), DIVIDE ( [Nº de empresas], base ) - 1 )
+			formatString: +0.0%;-0.0%;0.0%
+			displayFolder: 4. Estrutura do retalho
+
+		measure 'Inflação anual %' =
+				-- Taxa de variação média anual do IHPC. Sem categoria filtrada, usa o total (CP00).
+				IF (
+				    ISFILTERED ( dim_coicop ),
+				    AVERAGE ( fato_inflacao[TAXA_INFLACAO_PCT] ),
+				    CALCULATE ( AVERAGE ( fato_inflacao[TAXA_INFLACAO_PCT] ), dim_coicop[CO_COICOP] = "CP00" )
+				) / 100
+			formatString: 0.0%
+			displayFolder: 5. Preços e consumo
+
+		measure 'Índice de preços (2015 = 100)' =
+				IF (
+				    ISFILTERED ( dim_coicop ),
+				    AVERAGE ( fato_inflacao[INDICE_2015] ),
+				    CALCULATE ( AVERAGE ( fato_inflacao[INDICE_2015] ), dim_coicop[CO_COICOP] = "CP00" )
+				)
+			formatString: 0.0
+			displayFolder: 5. Preços e consumo
+
+		measure 'Inflação acumulada desde 2021 %' =
+				-- Subida de preços entre 2021 e o último ano selecionado.
+				VAR a = MAX ( dim_ano[ANO] )
+				VAR base =
+				    CALCULATE ( [Índice de preços (2015 = 100)], REMOVEFILTERS ( dim_ano ), dim_ano[ANO] = 2021 )
+				VAR atual =
+				    CALCULATE ( [Índice de preços (2015 = 100)], REMOVEFILTERS ( dim_ano ), dim_ano[ANO] = a )
+				RETURN
+				    IF ( NOT ISBLANK ( base ) && NOT ISBLANK ( atual ), DIVIDE ( atual, base ) - 1 )
+			formatString: 0.0%
+			displayFolder: 5. Preços e consumo
+
+		measure 'Despesa das famílias (M€)' =
+				IF (
+				    ISFILTERED ( dim_coicop ),
+				    SUM ( fato_consumo_familias[DESPESA_MEUR] ),
+				    CALCULATE ( SUM ( fato_consumo_familias[DESPESA_MEUR] ), dim_coicop[CO_COICOP] = "CP00" )
+				)
+			formatString: #,##0
+			displayFolder: 5. Preços e consumo
+
+		measure 'Peso na despesa %' =
+				-- Peso da categoria no total da despesa das famílias.
+				IF (
+				    ISFILTERED ( dim_coicop ),
+				    AVERAGE ( fato_consumo_familias[PESO_PCT] ),
+				    CALCULATE ( AVERAGE ( fato_consumo_familias[PESO_PCT] ), dim_coicop[CO_COICOP] = "CP00" )
+				) / 100
+			formatString: 0.0%
+			displayFolder: 5. Preços e consumo
+
+		measure 'Variação real do consumo %' =
+				-- Variação em volume (descontada a inflação) face ao ano anterior.
+				IF (
+				    ISFILTERED ( dim_coicop ),
+				    AVERAGE ( fato_consumo_familias[VAR_REAL_PCT] ),
+				    CALCULATE ( AVERAGE ( fato_consumo_familias[VAR_REAL_PCT] ), dim_coicop[CO_COICOP] = "CP00" )
+				) / 100
+			formatString: +0.0%;-0.0%;0.0%
+			displayFolder: 5. Preços e consumo
+
+		measure 'Despesa por habitante (€)' =
+				IF (
+				    ISFILTERED ( dim_coicop ),
+				    SUM ( fato_consumo_familias[DESPESA_EUR_HAB] ),
+				    CALCULATE ( SUM ( fato_consumo_familias[DESPESA_EUR_HAB] ), dim_coicop[CO_COICOP] = "CP00" )
+				)
+			formatString: #,##0
+			displayFolder: 5. Preços e consumo
+
+		measure 'Cor de destaque' =
+				-- Usar em formatação condicional (fx > Valor do campo): Portugal em destaque, UE27 em cinzento escuro.
+				SWITCH (
+				    SELECTEDVALUE ( dim_pais[DESTAQUE] ),
+				    "Portugal", "#0E7C66",
+				    "UE27", "#4A4A4A",
+				    "#C9CED6"
+				)
+			formatString: General
+			displayFolder: 6. Formatação
+
+		column Coluna
+			dataType: string
+			isHidden
+			sourceColumn: Coluna
+
+		partition _Medidas = m
+			mode: import
+			source =
+					let
+					    Fonte = #table(type table [Coluna = text], {})
+					in
+					    Fonte
+
+	relationship r_fato_vendas_retalho_DATA
+		fromColumn: fato_vendas_retalho.DATA
+		toColumn: dim_tempo.DATA
+
+	relationship r_fato_vendas_retalho_CO_GEO
+		fromColumn: fato_vendas_retalho.CO_GEO
+		toColumn: dim_pais.CO_GEO
+
+	relationship r_fato_vendas_retalho_CO_NACE
+		fromColumn: fato_vendas_retalho.CO_NACE
+		toColumn: dim_atividade.CO_NACE
+
+	relationship r_dim_tempo_ANO
+		fromColumn: dim_tempo.ANO
+		toColumn: dim_ano.ANO
+
+	relationship r_fato_compras_online_ANO
+		fromColumn: fato_compras_online.ANO
+		toColumn: dim_ano.ANO
+
+	relationship r_fato_compras_online_CO_GEO
+		fromColumn: fato_compras_online.CO_GEO
+		toColumn: dim_pais.CO_GEO
+
+	relationship r_fato_compras_online_CO_PERFIL
+		fromColumn: fato_compras_online.CO_PERFIL
+		toColumn: dim_perfil.CO_PERFIL
+
+	relationship r_fato_categorias_online_ANO
+		fromColumn: fato_categorias_online.ANO
+		toColumn: dim_ano.ANO
+
+	relationship r_fato_categorias_online_CO_GEO
+		fromColumn: fato_categorias_online.CO_GEO
+		toColumn: dim_pais.CO_GEO
+
+	relationship r_fato_categorias_online_CO_PERFIL
+		fromColumn: fato_categorias_online.CO_PERFIL
+		toColumn: dim_perfil.CO_PERFIL
+
+	relationship r_fato_categorias_online_CO_CATEGORIA
+		fromColumn: fato_categorias_online.CO_CATEGORIA
+		toColumn: dim_categoria_online.CO_CATEGORIA
+
+	relationship r_fato_estrutura_retalho_ANO
+		fromColumn: fato_estrutura_retalho.ANO
+		toColumn: dim_ano.ANO
+
+	relationship r_fato_estrutura_retalho_CO_GEO
+		fromColumn: fato_estrutura_retalho.CO_GEO
+		toColumn: dim_pais.CO_GEO
+
+	relationship r_fato_estrutura_retalho_CO_NACE
+		fromColumn: fato_estrutura_retalho.CO_NACE
+		toColumn: dim_atividade.CO_NACE
+
+	relationship r_fato_estrutura_retalho_CO_DIMENSAO
+		fromColumn: fato_estrutura_retalho.CO_DIMENSAO
+		toColumn: dim_dimensao_empresa.CO_DIMENSAO
+
+	relationship r_fato_inflacao_ANO
+		fromColumn: fato_inflacao.ANO
+		toColumn: dim_ano.ANO
+
+	relationship r_fato_inflacao_CO_GEO
+		fromColumn: fato_inflacao.CO_GEO
+		toColumn: dim_pais.CO_GEO
+
+	relationship r_fato_inflacao_CO_COICOP
+		fromColumn: fato_inflacao.CO_COICOP
+		toColumn: dim_coicop.CO_COICOP
+
+	relationship r_fato_consumo_familias_ANO
+		fromColumn: fato_consumo_familias.ANO
+		toColumn: dim_ano.ANO
+
+	relationship r_fato_consumo_familias_CO_GEO
+		fromColumn: fato_consumo_familias.CO_GEO
+		toColumn: dim_pais.CO_GEO
+
+	relationship r_fato_consumo_familias_CO_COICOP
+		fromColumn: fato_consumo_familias.CO_COICOP
+		toColumn: dim_coicop.CO_COICOP
+

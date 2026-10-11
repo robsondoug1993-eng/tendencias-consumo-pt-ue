@@ -1,0 +1,45 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "p2_online",
+  "displayName": "Quem compra online",
+  "displayOption": "FitToPage",
+  "height": 1080,
+  "width": 1920,
+  "visualInteractions": [
+    {
+      "source": "p2_pais",
+      "target": "p2_ranking",
+      "type": "NoFilter"
+    },
+    {
+      "source": "p2_grupo",
+      "target": "p2_card1",
+      "type": "NoFilter"
+    },
+    {
+      "source": "p2_grupo",
+      "target": "p2_card2",
+      "type": "NoFilter"
+    },
+    {
+      "source": "p2_grupo",
+      "target": "p2_card3",
+      "type": "NoFilter"
+    },
+    {
+      "source": "p2_grupo",
+      "target": "p2_card4",
+      "type": "NoFilter"
+    },
+    {
+      "source": "p2_grupo",
+      "target": "p2_ranking",
+      "type": "NoFilter"
+    },
+    {
+      "source": "p2_grupo",
+      "target": "p2_categorias",
+      "type": "NoFilter"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+table dim_coicop
+	lineageTag: b221c814-741c-428e-81a3-39fcd6275cd7
+
+	column CO_COICOP
+		dataType: string
+		lineageTag: a50ee97e-85f1-4eac-a96c-595df4e7f579
+		sourceColumn: CO_COICOP
+
+	column NO_COICOP
+		dataType: string
+		lineageTag: 8ceb212c-f126-4d12-a5df-fe22c074350b
+		sourceColumn: NO_COICOP
+		sortByColumn: ORDEM
+
+	column ORDEM
+		dataType: int64
+		isHidden
+		lineageTag: 117aee16-dcec-46c8-b7cb-bac575d5e661
+		summarizeBy: none
+		sourceColumn: ORDEM
+
+	partition dim_coicop = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(PastaSaida & "dim_coicop.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalho, {{"CO_COICOP", type text}, {"NO_COICOP", type text}, {"ORDEM", Int64.Type}}, "pt-PT")
+				in
+				    Tipos
+

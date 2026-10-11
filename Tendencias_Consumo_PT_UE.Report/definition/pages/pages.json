@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.1.0/schema.json",
+  "pageOrder": [
+    "ae16230d440bdf747d43",
+    "p2_online",
+    "p3_canais",
+    "p4_estrutura",
+    "p5_precos",
+    "p6_perspetivas"
+  ],
+  "activePageName": "p6_perspetivas"
+}

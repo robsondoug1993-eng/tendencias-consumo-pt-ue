@@ -1,0 +1,40 @@
+﻿CO_GEO;NO_GEO;CO_NACE;NO_CANAL;INDICADOR;AJUSTE;MODELO;MAPE_PCT;ESCOLHIDO
+PT;Portugal;G47;Retalho (total);VOL_SLS;SCA;ETS;0,7;Sim
+PT;Portugal;G47;Retalho (total);VOL_SLS;SCA;AR;1,17;Não
+PT;Portugal;G47;Retalho (total);VOL_SLS;SCA;Ingénuo;1,83;Não
+PT;Portugal;G4711;Super e hipermercados;VOL_SLS;SCA;ETS;1,04;Não
+PT;Portugal;G4711;Super e hipermercados;VOL_SLS;SCA;AR;0,85;Sim
+PT;Portugal;G4711;Super e hipermercados;VOL_SLS;SCA;Ingénuo;1,57;Não
+PT;Portugal;G472;Comércio alimentar especializado;VOL_SLS;SCA;ETS;1,94;Não
+PT;Portugal;G472;Comércio alimentar especializado;VOL_SLS;SCA;AR;1,87;Sim
+PT;Portugal;G472;Comércio alimentar especializado;VOL_SLS;SCA;Ingénuo;1,96;Não
+PT;Portugal;G4791;Online (internet e correspondência);VOL_SLS;SCA;ETS;4,75;Sim
+PT;Portugal;G4791;Online (internet e correspondência);VOL_SLS;SCA;AR;5,49;Não
+PT;Portugal;G4791;Online (internet e correspondência);VOL_SLS;SCA;Ingénuo;4,77;Não
+PT;Portugal;G47;Retalho (total);VOL_SLS;NSA;ETS;1,35;Sim
+PT;Portugal;G47;Retalho (total);VOL_SLS;NSA;AR;1,98;Não
+PT;Portugal;G47;Retalho (total);VOL_SLS;NSA;Ingénuo;4,01;Não
+PT;Portugal;G4711;Super e hipermercados;VOL_SLS;NSA;ETS;1,81;Não
+PT;Portugal;G4711;Super e hipermercados;VOL_SLS;NSA;AR;1,38;Sim
+PT;Portugal;G4711;Super e hipermercados;VOL_SLS;NSA;Ingénuo;3,24;Não
+PT;Portugal;G472;Comércio alimentar especializado;VOL_SLS;NSA;ETS;3,22;Não
+PT;Portugal;G472;Comércio alimentar especializado;VOL_SLS;NSA;AR;2,16;Sim
+PT;Portugal;G472;Comércio alimentar especializado;VOL_SLS;NSA;Ingénuo;2,8;Não
+PT;Portugal;G4791;Online (internet e correspondência);VOL_SLS;NSA;ETS;5,57;Não
+PT;Portugal;G4791;Online (internet e correspondência);VOL_SLS;NSA;AR;5,05;Sim
+PT;Portugal;G4791;Online (internet e correspondência);VOL_SLS;NSA;Ingénuo;6,22;Não
+PT;Portugal;G47;Retalho (total);NETTUR;SCA;ETS;1,84;Não
+PT;Portugal;G47;Retalho (total);NETTUR;SCA;AR;1,81;Sim
+PT;Portugal;G47;Retalho (total);NETTUR;SCA;Ingénuo;3,35;Não
+EU27_2020;UE27;G47;Retalho (total);VOL_SLS;SCA;ETS;0,37;Sim
+EU27_2020;UE27;G47;Retalho (total);VOL_SLS;SCA;AR;0,43;Não
+EU27_2020;UE27;G47;Retalho (total);VOL_SLS;SCA;Ingénuo;0,91;Não
+EU27_2020;UE27;G4711;Super e hipermercados;VOL_SLS;SCA;ETS;0,57;Não
+EU27_2020;UE27;G4711;Super e hipermercados;VOL_SLS;SCA;AR;0,4;Sim
+EU27_2020;UE27;G4711;Super e hipermercados;VOL_SLS;SCA;Ingénuo;0,66;Não
+EU27_2020;UE27;G472;Comércio alimentar especializado;VOL_SLS;SCA;ETS;0,94;Não
+EU27_2020;UE27;G472;Comércio alimentar especializado;VOL_SLS;SCA;AR;0,52;Sim
+EU27_2020;UE27;G472;Comércio alimentar especializado;VOL_SLS;SCA;Ingénuo;0,88;Não
+EU27_2020;UE27;G4791;Online (internet e correspondência);VOL_SLS;SCA;ETS;1,16;Sim
+EU27_2020;UE27;G4791;Online (internet e correspondência);VOL_SLS;SCA;AR;1,89;Não
+EU27_2020;UE27;G4791;Online (internet e correspondência);VOL_SLS;SCA;Ingénuo;2,1;Não

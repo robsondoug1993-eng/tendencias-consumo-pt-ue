@@ -1,0 +1,25 @@
+table dim_ano
+	lineageTag: 02c6bff3-db4f-419b-8165-9b83b8f005a4
+
+	column ANO
+		dataType: int64
+		formatString: 0
+		lineageTag: 751ef69b-cd2e-4b6b-b7f5-fdf0570a67fe
+		summarizeBy: none
+		sourceColumn: ANO
+
+	column FASE
+		dataType: string
+		lineageTag: 211918cd-a269-4fc8-b547-a4cb4b183eae
+		sourceColumn: FASE
+
+	partition dim_ano = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(PastaSaida & "dim_ano.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalho, {{"ANO", Int64.Type}, {"FASE", type text}}, "pt-PT")
+				in
+				    Tipos
+

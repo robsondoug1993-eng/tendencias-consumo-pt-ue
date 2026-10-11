@@ -1,0 +1,10 @@
+﻿CO_GEO;NO_GEO;CO_NACE;NO_CANAL;ORDEM_CANAL;INDICADOR;CRESC_2025_PCT;CRESC_2026_PCT;CRESC_2026_P10;CRESC_2026_P90;CRESC_2027_PCT;CRESC_2027_P10;CRESC_2027_P90
+PT;Portugal;G47;Retalho (total);1;Volume;5,3;3,0;2,6;3,4;1,5;-1,0;4,1
+PT;Portugal;G4711;Super e hipermercados;2;Volume;5,9;2,1;1,7;2,5;1,0;-0,4;2,4
+PT;Portugal;G472;Comércio alimentar especializado;3;Volume;1,5;-2,9;-4,1;-1,9;-5,0;-10,8;0,4
+PT;Portugal;G4791;Online (internet e correspondência);4;Volume;2,0;3,7;1,8;6,3;0,7;-9,4;11,0
+PT;Portugal;G47;Retalho (total);1;Valor;5,3;6,7;6,2;7,1;4,3;2,0;6,4
+EU27_2020;UE27;G47;Retalho (total);1;Volume;2,5;1,4;1,1;1,6;0,4;-1,3;2,3
+EU27_2020;UE27;G4711;Super e hipermercados;2;Volume;1,0;1,2;0,9;1,5;1,5;0,1;2,9
+EU27_2020;UE27;G472;Comércio alimentar especializado;3;Volume;1,7;0,0;-0,2;0,3;0,1;-1,2;1,5
+EU27_2020;UE27;G4791;Online (internet e correspondência);4;Volume;7,8;5,1;4,3;5,8;2,6;-3,9;8,5

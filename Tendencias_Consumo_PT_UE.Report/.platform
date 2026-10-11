@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Tendencias_Consumo_PT_UE"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "d4b4e097-bab7-4fc5-a28e-53dcdf0c7db2"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "p1_fonte",
+  "position": {
+    "x": 24,
+    "y": 1044,
+    "z": 99,
+    "height": 30,
+    "width": 1872,
+    "tabOrder": 99
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Fonte: Eurostat (isoc_ec_ibuy/ib20/ibgs, sts_trtu_m, sbs_sc_dt_r2/ovw, prc_hicp_aind, nama_10_co3_p3), dados descarregados a 11/10/2026. Tratamento e análise: Robson Douglas de Almeida.",
+                    "textStyle": {
+                      "fontSize": "9pt",
+                      "color": "#6B7280"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

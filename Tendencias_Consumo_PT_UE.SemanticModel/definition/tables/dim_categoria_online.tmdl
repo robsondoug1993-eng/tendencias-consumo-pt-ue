@@ -1,0 +1,36 @@
+table dim_categoria_online
+	lineageTag: 006f640f-78a3-4d7b-bea5-20d51c1a1a21
+
+	column CO_CATEGORIA
+		dataType: string
+		lineageTag: 6ac1a2aa-32ef-4297-90cf-e55f6922361c
+		sourceColumn: CO_CATEGORIA
+
+	column NO_CATEGORIA
+		dataType: string
+		lineageTag: 7f404305-9bbf-460d-bf0f-fbd8365f2814
+		sourceColumn: NO_CATEGORIA
+		sortByColumn: ORDEM
+
+	column TIPO
+		dataType: string
+		lineageTag: 7560a069-f3d6-4d45-b94e-a50970bbc1d0
+		sourceColumn: TIPO
+
+	column ORDEM
+		dataType: int64
+		isHidden
+		lineageTag: 4223a2c0-743b-47d9-a93a-40bd1ab4ad11
+		summarizeBy: none
+		sourceColumn: ORDEM
+
+	partition dim_categoria_online = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(PastaSaida & "dim_categoria_online.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalho, {{"CO_CATEGORIA", type text}, {"NO_CATEGORIA", type text}, {"TIPO", type text}, {"ORDEM", Int64.Type}}, "pt-PT")
+				in
+				    Tipos
+

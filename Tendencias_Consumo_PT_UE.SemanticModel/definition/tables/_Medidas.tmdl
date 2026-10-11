@@ -1,0 +1,427 @@
+table _Medidas
+	lineageTag: c894caf6-0291-478c-8135-a576892f2da6
+
+	measure 'Índice de volume' =
+			-- Média do índice de volume (base 2021). Sem atividade filtrada, usa o retalho total (G47).
+			IF (
+			    ISFILTERED ( dim_atividade ),
+			    AVERAGE ( fato_vendas_retalho[IDX_VOLUME] ),
+			    CALCULATE ( AVERAGE ( fato_vendas_retalho[IDX_VOLUME] ), dim_atividade[CO_NACE] = "G47" )
+			)
+		formatString: 0.0
+		displayFolder: 1. Vendas do retalho
+		lineageTag: da77aa3f-0b40-479b-9c07-adb3b853fee2
+
+	measure 'Índice de valor' =
+			IF (
+			    ISFILTERED ( dim_atividade ),
+			    AVERAGE ( fato_vendas_retalho[IDX_VALOR] ),
+			    CALCULATE ( AVERAGE ( fato_vendas_retalho[IDX_VALOR] ), dim_atividade[CO_NACE] = "G47" )
+			)
+		formatString: 0.0
+		displayFolder: 1. Vendas do retalho
+		lineageTag: 7cbae320-f67e-4b1d-a6e8-59e021da0203
+
+	measure 'Variação de preços desde 2021 %' =
+			-- Valor / volume: quanto do crescimento em euros é só preço (deflator implícito).
+			DIVIDE ( [Índice de valor], [Índice de volume] ) - 1
+		formatString: 0.0%
+		displayFolder: 1. Vendas do retalho
+		lineageTag: 2d80e7ab-1247-472e-bcb4-b6bd284cd615
+
+	measure 'Volume vs 2019 %' =
+			-- Compara com a média de 2019 (último ano antes da pandemia).
+			VAR base =
+			    CALCULATE ( [Índice de volume], REMOVEFILTERS ( dim_tempo ), REMOVEFILTERS ( dim_ano ), dim_ano[ANO] = 2019 )
+			RETURN
+			    IF ( NOT ISBLANK ( base ), DIVIDE ( [Índice de volume], base ) - 1 )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 1. Vendas do retalho
+		lineageTag: c8265978-65d3-4692-9e6a-b1640b271d4b
+
+	measure 'Volume var. homóloga %' =
+			-- Mesmo(s) mês(es) do ano anterior; funciona para mês, trimestre ou ano.
+			VAR datasAnt =
+			    SELECTCOLUMNS ( VALUES ( dim_tempo[DATA] ), "DataAnt", EDATE ( dim_tempo[DATA], -12 ) )
+			VAR ant =
+			    CALCULATE ( [Índice de volume], REMOVEFILTERS ( dim_tempo ), REMOVEFILTERS ( dim_ano ), TREATAS ( datasAnt, dim_tempo[DATA] ) )
+			RETURN
+			    IF ( NOT ISBLANK ( ant ), DIVIDE ( [Índice de volume], ant ) - 1 )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 1. Vendas do retalho
+		lineageTag: 61bd653e-732a-4fb6-926c-9daee422eeed
+
+	measure 'Volume · Online' = CALCULATE ( [Índice de volume], dim_atividade[CO_NACE] = "G4791" )
+		formatString: 0.0
+		displayFolder: 1. Vendas do retalho\Por canal
+		lineageTag: d1880655-7c08-48f3-b917-e787c30f72d9
+
+	measure 'Volume · Retalho total' = CALCULATE ( [Índice de volume], dim_atividade[CO_NACE] = "G47" )
+		formatString: 0.0
+		displayFolder: 1. Vendas do retalho\Por canal
+		lineageTag: 69f87108-c343-4b29-8703-e5f3a02b616f
+
+	measure 'Volume · Super e hipermercados' = CALCULATE ( [Índice de volume], dim_atividade[CO_NACE] = "G4711" )
+		formatString: 0.0
+		displayFolder: 1. Vendas do retalho\Por canal
+		lineageTag: 3d083d4c-a17e-4063-bc30-9669419c7840
+
+	measure 'Volume · Comércio alimentar especializado' = CALCULATE ( [Índice de volume], dim_atividade[CO_NACE] = "G472" )
+		formatString: 0.0
+		displayFolder: 1. Vendas do retalho\Por canal
+		lineageTag: 690365e4-6db2-46ff-a903-9513fc584310
+
+	measure 'Volume · Mercados e feiras' = CALCULATE ( [Índice de volume], dim_atividade[CO_NACE] = "G478" )
+		formatString: 0.0
+		displayFolder: 1. Vendas do retalho\Por canal
+		lineageTag: f72eab39-a224-404f-a413-79f570eb5bff
+
+	measure 'Online vs retalho desde 2019 (pp)' =
+			-- Quantos pontos percentuais o online cresceu acima (ou abaixo) do retalho total desde 2019.
+			(
+			    CALCULATE ( [Volume vs 2019 %], dim_atividade[CO_NACE] = "G4791" )
+			        - CALCULATE ( [Volume vs 2019 %], dim_atividade[CO_NACE] = "G47" )
+			) * 100
+		formatString: +0.0;-0.0;0.0
+		displayFolder: 1. Vendas do retalho\Por canal
+		lineageTag: 3a99a0f1-ec66-454e-ba65-43c61820821d
+
+	measure '% comprou online (12 meses)' =
+			-- % de pessoas (16-74) com compra online nos últimos 12 meses. Sem perfil filtrado, usa o total.
+			IF (
+			    ISFILTERED ( dim_perfil ),
+			    AVERAGE ( fato_compras_online[PCT_COMPROU_12M] ),
+			    CALCULATE ( AVERAGE ( fato_compras_online[PCT_COMPROU_12M] ), dim_perfil[CO_PERFIL] = "IND_TOTAL" )
+			) / 100
+		formatString: 0.0%
+		displayFolder: 2. Compras online
+		lineageTag: d2f261e1-78f9-4a0a-ac0a-669d28c93353
+
+	measure '% comprou online (3 meses)' =
+			IF (
+			    ISFILTERED ( dim_perfil ),
+			    AVERAGE ( fato_compras_online[PCT_COMPROU_3M] ),
+			    CALCULATE ( AVERAGE ( fato_compras_online[PCT_COMPROU_3M] ), dim_perfil[CO_PERFIL] = "IND_TOTAL" )
+			) / 100
+		formatString: 0.0%
+		displayFolder: 2. Compras online
+		lineageTag: 6b6a9967-8266-4927-acb5-e1f559db2404
+
+	measure '% online · Portugal' = CALCULATE ( [% comprou online (12 meses)], REMOVEFILTERS ( dim_pais ), dim_pais[CO_GEO] = "PT" )
+		formatString: 0.0%
+		displayFolder: 2. Compras online
+		lineageTag: 5009f8e1-eada-4694-a853-a5556f1b7bc2
+
+	measure '% online · UE27' = CALCULATE ( [% comprou online (12 meses)], REMOVEFILTERS ( dim_pais ), dim_pais[CO_GEO] = "EU27_2020" )
+		formatString: 0.0%
+		displayFolder: 2. Compras online
+		lineageTag: f57f68fc-887b-4429-adaa-6dc9a147b539
+
+	measure 'Diferença PT vs UE (pp)' = ( [% online · Portugal] - [% online · UE27] ) * 100
+		formatString: +0.0;-0.0;0.0
+		displayFolder: 2. Compras online
+		lineageTag: 40d0a3a1-9126-4906-a984-1c9fed304212
+
+	measure 'Online var. vs ano anterior (pp)' =
+			VAR a = MAX ( dim_ano[ANO] )
+			VAR ant =
+			    CALCULATE ( [% comprou online (12 meses)], REMOVEFILTERS ( dim_ano ), dim_ano[ANO] = a - 1 )
+			RETURN
+			    IF ( NOT ISBLANK ( ant ), ( [% comprou online (12 meses)] - ant ) * 100 )
+		formatString: +0.0;-0.0;0.0
+		displayFolder: 2. Compras online
+		lineageTag: 52dbbe18-1019-403e-8ec0-bf8353030b6e
+
+	measure 'Ranking UE · compras online' =
+			-- Posição do país selecionado entre os 27 (1 = mais compras online).
+			IF (
+			    HASONEVALUE ( dim_pais[CO_GEO] ) && SELECTEDVALUE ( dim_pais[TIPO] ) = "País",
+			    RANKX (
+			        FILTER ( ALL ( dim_pais ), dim_pais[TIPO] = "País" ),
+			        [% comprou online (12 meses)], , DESC, Dense
+			    )
+			)
+		formatString: 0
+		displayFolder: 2. Compras online
+		lineageTag: d0f3e256-5075-4c63-9646-99cee29f2150
+
+	measure '% pessoas que compraram (categoria)' =
+			-- % de todas as pessoas que compraram a categoria online nos últimos 3 meses.
+			IF (
+			    ISFILTERED ( dim_perfil ),
+			    AVERAGE ( fato_categorias_online[PCT_INDIVIDUOS] ),
+			    CALCULATE ( AVERAGE ( fato_categorias_online[PCT_INDIVIDUOS] ), dim_perfil[CO_PERFIL] = "IND_TOTAL" )
+			) / 100
+		formatString: 0.0%
+		displayFolder: 3. Categorias online
+		lineageTag: 3eaef04f-0311-49b1-9e50-db0a61d0f4ec
+
+	measure '% dos compradores online (categoria)' =
+			-- Entre quem comprou online nos últimos 3 meses, % que comprou a categoria.
+			IF (
+			    ISFILTERED ( dim_perfil ),
+			    AVERAGE ( fato_categorias_online[PCT_COMPRADORES] ),
+			    CALCULATE ( AVERAGE ( fato_categorias_online[PCT_COMPRADORES] ), dim_perfil[CO_PERFIL] = "IND_TOTAL" )
+			) / 100
+		formatString: 0.0%
+		displayFolder: 3. Categorias online
+		lineageTag: ad0545ad-e8f3-41cd-b7dd-2a0f50a48118
+
+	measure '% pessoas · último ano disponível' =
+			-- Os bens são inquiridos até 2024 e alguns serviços só em anos alternados:
+			-- usa o último ano com dado dentro do período filtrado, categoria a categoria.
+			VAR ult = MAX ( fato_categorias_online[ANO] )
+			RETURN
+			    CALCULATE ( [% pessoas que compraram (categoria)], REMOVEFILTERS ( dim_ano ), dim_ano[ANO] = ult )
+		formatString: 0.0%
+		displayFolder: 3. Categorias online
+		lineageTag: 72f93ca8-500b-491c-80cf-69b3296969ee
+
+	measure 'Nº de empresas' =
+			-- Sem atividade filtrada, usa o retalho total (G47) para não somar níveis diferentes.
+			IF (
+			    ISFILTERED ( dim_atividade ),
+			    SUM ( fato_estrutura_retalho[N_EMPRESAS] ),
+			    CALCULATE ( SUM ( fato_estrutura_retalho[N_EMPRESAS] ), dim_atividade[CO_NACE] = "G47" )
+			)
+		formatString: #,##0
+		displayFolder: 4. Estrutura do retalho
+		lineageTag: 199280c5-5f83-45d0-95f7-2ce2a365f70b
+
+	measure 'Pessoas ao serviço' =
+			IF (
+			    ISFILTERED ( dim_atividade ),
+			    SUM ( fato_estrutura_retalho[N_PESSOAS] ),
+			    CALCULATE ( SUM ( fato_estrutura_retalho[N_PESSOAS] ), dim_atividade[CO_NACE] = "G47" )
+			)
+		formatString: #,##0
+		displayFolder: 4. Estrutura do retalho
+		lineageTag: 55a4830a-7396-4420-9561-8f25dcf64f03
+
+	measure 'Volume de negócios (M€)' =
+			IF (
+			    ISFILTERED ( dim_atividade ),
+			    SUM ( fato_estrutura_retalho[VOLUME_NEGOCIOS_MEUR] ),
+			    CALCULATE ( SUM ( fato_estrutura_retalho[VOLUME_NEGOCIOS_MEUR] ), dim_atividade[CO_NACE] = "G47" )
+			)
+		formatString: #,##0
+		displayFolder: 4. Estrutura do retalho
+		lineageTag: 2f9ff5d3-faa1-41d8-a931-d52ecd58fd91
+
+	measure '% das empresas' = DIVIDE ( [Nº de empresas], CALCULATE ( [Nº de empresas], REMOVEFILTERS ( dim_dimensao_empresa ) ) )
+		formatString: 0.0%
+		displayFolder: 4. Estrutura do retalho
+		lineageTag: 412876f8-fb77-4f71-bf92-7298568b85be
+
+	measure '% do volume de negócios' = DIVIDE ( [Volume de negócios (M€)], CALCULATE ( [Volume de negócios (M€)], REMOVEFILTERS ( dim_dimensao_empresa ) ) )
+		formatString: 0.0%
+		displayFolder: 4. Estrutura do retalho
+		lineageTag: c3ee4fc1-1b1c-4ece-b448-2e91958438bc
+
+	measure '% das pessoas ao serviço' = DIVIDE ( [Pessoas ao serviço], CALCULATE ( [Pessoas ao serviço], REMOVEFILTERS ( dim_dimensao_empresa ) ) )
+		formatString: 0.0%
+		displayFolder: 4. Estrutura do retalho
+		lineageTag: 88beaf02-3776-49b5-b04a-45251d7ca016
+
+	measure 'Volume de negócios por empresa (mil €)' = DIVIDE ( [Volume de negócios (M€)] * 1000, [Nº de empresas] )
+		formatString: #,##0
+		displayFolder: 4. Estrutura do retalho
+		lineageTag: 0ce51987-fd35-434d-b4d7-df7803a00a84
+
+	measure 'Quota das grandes empresas no VN %' = CALCULATE ( [% do volume de negócios], dim_dimensao_empresa[CO_DIMENSAO] = "GRANDE" )
+		formatString: 0.0%
+		displayFolder: 4. Estrutura do retalho
+		lineageTag: f0910447-4f8f-4964-9e4c-05087ec2b7c1
+
+	measure 'Quota das microempresas no VN %' = CALCULATE ( [% do volume de negócios], dim_dimensao_empresa[CO_DIMENSAO] = "MICRO" )
+		formatString: 0.0%
+		displayFolder: 4. Estrutura do retalho
+		lineageTag: 73fc21f1-e39b-49d5-863d-2b962dcad3b0
+
+	measure 'Nº de empresas vs 2010 %' =
+			VAR base =
+			    CALCULATE ( [Nº de empresas], REMOVEFILTERS ( dim_ano ), dim_ano[ANO] = 2010 )
+			RETURN
+			    IF ( NOT ISBLANK ( base ), DIVIDE ( [Nº de empresas], base ) - 1 )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 4. Estrutura do retalho
+		lineageTag: a8a33e24-129d-48ab-b07f-41a2e2b7b315
+
+	measure 'Inflação anual %' =
+			-- Taxa de variação média anual do IHPC. Sem categoria filtrada, usa o total (CP00).
+			IF (
+			    ISFILTERED ( dim_coicop ),
+			    AVERAGE ( fato_inflacao[TAXA_INFLACAO_PCT] ),
+			    CALCULATE ( AVERAGE ( fato_inflacao[TAXA_INFLACAO_PCT] ), dim_coicop[CO_COICOP] = "CP00" )
+			) / 100
+		formatString: 0.0%
+		displayFolder: 5. Preços e consumo
+		lineageTag: 3305054c-b718-4a34-bb26-4320b032ffba
+
+	measure 'Índice de preços (2015 = 100)' =
+			IF (
+			    ISFILTERED ( dim_coicop ),
+			    AVERAGE ( fato_inflacao[INDICE_2015] ),
+			    CALCULATE ( AVERAGE ( fato_inflacao[INDICE_2015] ), dim_coicop[CO_COICOP] = "CP00" )
+			)
+		formatString: 0.0
+		displayFolder: 5. Preços e consumo
+		lineageTag: 371fffa5-1b6d-4128-9f4c-f31c05c5a559
+
+	measure 'Inflação acumulada desde 2021 %' =
+			-- Subida de preços entre 2021 e o último ano selecionado.
+			VAR a = MAX ( dim_ano[ANO] )
+			VAR base =
+			    CALCULATE ( [Índice de preços (2015 = 100)], REMOVEFILTERS ( dim_ano ), dim_ano[ANO] = 2021 )
+			VAR atual =
+			    CALCULATE ( [Índice de preços (2015 = 100)], REMOVEFILTERS ( dim_ano ), dim_ano[ANO] = a )
+			RETURN
+			    IF ( NOT ISBLANK ( base ) && NOT ISBLANK ( atual ), DIVIDE ( atual, base ) - 1 )
+		formatString: 0.0%
+		displayFolder: 5. Preços e consumo
+		lineageTag: 124a64b6-7720-40ef-b83c-19ce891be3ca
+
+	measure 'Despesa das famílias (M€)' =
+			IF (
+			    ISFILTERED ( dim_coicop ),
+			    SUM ( fato_consumo_familias[DESPESA_MEUR] ),
+			    CALCULATE ( SUM ( fato_consumo_familias[DESPESA_MEUR] ), dim_coicop[CO_COICOP] = "CP00" )
+			)
+		formatString: #,##0
+		displayFolder: 5. Preços e consumo
+		lineageTag: 3f07a228-6262-4855-8394-bf5bcb412942
+
+	measure 'Peso na despesa %' =
+			-- Peso da categoria no total da despesa das famílias.
+			IF (
+			    ISFILTERED ( dim_coicop ),
+			    AVERAGE ( fato_consumo_familias[PESO_PCT] ),
+			    CALCULATE ( AVERAGE ( fato_consumo_familias[PESO_PCT] ), dim_coicop[CO_COICOP] = "CP00" )
+			) / 100
+		formatString: 0.0%
+		displayFolder: 5. Preços e consumo
+		lineageTag: 7f19cac9-e2e0-4fda-b542-dfd2b59c186b
+
+	measure 'Variação real do consumo %' =
+			-- Variação em volume (descontada a inflação) face ao ano anterior.
+			IF (
+			    ISFILTERED ( dim_coicop ),
+			    AVERAGE ( fato_consumo_familias[VAR_REAL_PCT] ),
+			    CALCULATE ( AVERAGE ( fato_consumo_familias[VAR_REAL_PCT] ), dim_coicop[CO_COICOP] = "CP00" )
+			) / 100
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 5. Preços e consumo
+		lineageTag: 10432dc6-6373-4e9c-80de-f170b1049f76
+
+	measure 'Despesa por habitante (€)' =
+			IF (
+			    ISFILTERED ( dim_coicop ),
+			    SUM ( fato_consumo_familias[DESPESA_EUR_HAB] ),
+			    CALCULATE ( SUM ( fato_consumo_familias[DESPESA_EUR_HAB] ), dim_coicop[CO_COICOP] = "CP00" )
+			)
+		formatString: #,##0
+		displayFolder: 5. Preços e consumo
+		lineageTag: ff66747d-09d1-408e-a8cd-63967f8ac2c7
+
+	measure 'Cor de destaque' =
+			-- Usar em formatação condicional (fx > Valor do campo): Portugal em destaque, UE27 em cinzento escuro.
+			SWITCH (
+			    SELECTEDVALUE ( dim_pais[DESTAQUE] ),
+			    "Portugal", "#0E7C66",
+			    "UE27", "#4A4A4A",
+			    "#C9CED6"
+			)
+		formatString: General
+		displayFolder: 6. Formatação
+		lineageTag: ac2b16ab-851c-43b1-9436-682fbb100adf
+
+	measure 'Previsão · Real' = CALCULATE ( AVERAGE ( fato_previsao[VALOR] ), fato_previsao[TIPO] = "Real" )
+		formatString: 0.0
+		displayFolder: 7. Previsão
+		lineageTag: b1f3b76f-cab9-4c9a-af02-5149d36dfd2c
+
+	measure 'Previsão · Previsto' =
+			-- Inclui o último mês real para a linha prevista continuar a real.
+			VAR d = MAX ( fato_previsao[DATA] )
+			VAR ultimoReal = CALCULATE ( MAX ( fato_previsao[DATA] ), fato_previsao[TIPO] = "Real", REMOVEFILTERS ( fato_previsao[DATA] ) )
+			RETURN
+			    IF (
+			        d = ultimoReal,
+			        [Previsão · Real],
+			        CALCULATE ( AVERAGE ( fato_previsao[VALOR] ), fato_previsao[TIPO] = "Previsão" )
+			    )
+		formatString: 0.0
+		displayFolder: 7. Previsão
+		lineageTag: b945d90d-d49f-4bb9-b7d2-11e32fc10fab
+
+	measure 'Previsão · Limite inferior 80%' = AVERAGE ( fato_previsao[LIM80_INF] )
+		formatString: 0.0
+		displayFolder: 7. Previsão
+		lineageTag: 163553bf-6e55-45b7-92d6-053542fd8998
+
+	measure 'Previsão · Limite superior 80%' = AVERAGE ( fato_previsao[LIM80_SUP] )
+		formatString: 0.0
+		displayFolder: 7. Previsão
+		lineageTag: 13267ddd-ce66-4af9-8c96-e73e7e0e0f9c
+
+	measure 'Crescimento 2025 %' = AVERAGE ( previsao_resumo_anual[CRESC_2025_PCT] ) / 100
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 7. Previsão
+		lineageTag: 1d72221f-2e7a-4ec2-856b-846d0abae09c
+
+	measure 'Crescimento 2026 % (previsão)' = AVERAGE ( previsao_resumo_anual[CRESC_2026_PCT] ) / 100
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 7. Previsão
+		lineageTag: 63320439-7aed-4510-b3de-4dca76376f51
+
+	measure 'Crescimento 2027 % (previsão)' = AVERAGE ( previsao_resumo_anual[CRESC_2027_PCT] ) / 100
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 7. Previsão
+		lineageTag: 5aa3f452-709d-488e-b19f-dcc4a7d0a1d3
+
+	measure 'Crescimento 2027 · cenário baixo' = AVERAGE ( previsao_resumo_anual[CRESC_2027_P10] ) / 100
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 7. Previsão
+		lineageTag: d7adee7e-fa02-42ef-8f11-cfd77b8cd791
+
+	measure 'Crescimento 2027 · cenário alto' = AVERAGE ( previsao_resumo_anual[CRESC_2027_P90] ) / 100
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 7. Previsão
+		lineageTag: 66cc6f87-6b06-4415-a71d-fc8a0a95e12d
+
+	measure 'Online · Portugal (real e cenário)' =
+			-- Valor real até 2025; curva logística (cenário) a partir de 2026.
+			VAR r = CALCULATE ( AVERAGE ( fato_projecao_online[PCT_COMPROU_12M] ), fato_projecao_online[CO_GEO] = "PT" )
+			RETURN
+			    COALESCE ( r, CALCULATE ( AVERAGE ( fato_projecao_online[CURVA] ), fato_projecao_online[CO_GEO] = "PT" ) ) / 100
+		formatString: 0.0%
+		displayFolder: 7. Previsão
+		lineageTag: 39ebeebf-628c-4655-b863-22cd38d865d4
+
+	measure 'Online · UE27 (real e cenário)' =
+			VAR r = CALCULATE ( AVERAGE ( fato_projecao_online[PCT_COMPROU_12M] ), fato_projecao_online[CO_GEO] = "EU27_2020" )
+			RETURN
+			    COALESCE ( r, CALCULATE ( AVERAGE ( fato_projecao_online[CURVA] ), fato_projecao_online[CO_GEO] = "EU27_2020" ) ) / 100
+		formatString: 0.0%
+		displayFolder: 7. Previsão
+		lineageTag: 1b42d105-6d9c-4c5f-9de8-e4dd36ab8a2f
+
+	measure 'Erro do modelo (MAPE)' = AVERAGE ( previsao_metricas[MAPE_PCT] ) / 100
+		formatString: 0.0%
+		displayFolder: 7. Previsão
+		lineageTag: 28a678fe-b806-41be-a854-531d58af986d
+
+	column Coluna
+		dataType: string
+		isHidden
+		lineageTag: 5c41f17f-91fd-4e3b-a67a-73ae8d31f56a
+		sourceColumn: Coluna
+
+	partition _Medidas = m
+		mode: import
+		source =
+				let
+				    Fonte = #table(type table [Coluna = text], {})
+				in
+				    Fonte
+

@@ -1,0 +1,57 @@
+table fato_consumo_familias
+	lineageTag: b523c73e-1a3c-487f-aedb-838b160d01d2
+
+	column ANO
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8627f63e-a8ee-4061-b731-49dd90d19ccf
+		summarizeBy: none
+		sourceColumn: ANO
+
+	column CO_GEO
+		dataType: string
+		isHidden
+		lineageTag: a8dc442f-ca3f-430b-ae8b-9791393ce37e
+		sourceColumn: CO_GEO
+
+	column CO_COICOP
+		dataType: string
+		isHidden
+		lineageTag: ef844a9e-330e-4679-b3d5-13d0094e9290
+		sourceColumn: CO_COICOP
+
+	column DESPESA_MEUR
+		dataType: double
+		lineageTag: 9bb6b19e-2956-4e5e-a95a-e9cb92dbf113
+		summarizeBy: none
+		sourceColumn: DESPESA_MEUR
+
+	column PESO_PCT
+		dataType: double
+		lineageTag: 94011c6e-9e59-4474-ab5b-4cb125d3f330
+		summarizeBy: none
+		sourceColumn: PESO_PCT
+
+	column VAR_REAL_PCT
+		dataType: double
+		lineageTag: ad325aa9-8c71-429b-b7d3-e6d2460f9986
+		summarizeBy: none
+		sourceColumn: VAR_REAL_PCT
+
+	column DESPESA_EUR_HAB
+		dataType: double
+		lineageTag: d03720e8-0909-4c43-83c1-d2e1f20118b7
+		summarizeBy: none
+		sourceColumn: DESPESA_EUR_HAB
+
+	partition fato_consumo_familias = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(PastaSaida & "fato_consumo_familias.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalho, {{"ANO", Int64.Type}, {"CO_GEO", type text}, {"CO_COICOP", type text}, {"DESPESA_MEUR", type number}, {"PESO_PCT", type number}, {"VAR_REAL_PCT", type number}, {"DESPESA_EUR_HAB", type number}}, "pt-PT")
+				in
+				    Tipos
+

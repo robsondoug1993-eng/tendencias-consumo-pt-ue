@@ -1,0 +1,49 @@
+table dim_tempo
+	lineageTag: 8d2e10a7-e34a-40fb-ac56-74553b5b9f11
+
+	column DATA
+		dataType: dateTime
+		formatString: dd/mm/yyyy
+		lineageTag: 72635527-c8cc-486d-afa7-02f7d05f1a4b
+		summarizeBy: none
+		sourceColumn: DATA
+
+	column ANO
+		dataType: int64
+		formatString: 0
+		lineageTag: 22edfae8-3f9d-4d96-a221-8c4755dae07a
+		summarizeBy: none
+		sourceColumn: ANO
+
+	column MES
+		dataType: int64
+		lineageTag: 65f0b9f6-950b-44cb-bd29-d002be8288ab
+		summarizeBy: none
+		sourceColumn: MES
+
+	column NOME_MES
+		dataType: string
+		lineageTag: 3840f9b3-cc5b-4763-9695-22dfcc1c87be
+		sourceColumn: NOME_MES
+		sortByColumn: MES
+
+	column TRIMESTRE
+		dataType: string
+		lineageTag: 584215bb-e35d-4b42-af08-edd693aa278d
+		sourceColumn: TRIMESTRE
+
+	column SEMESTRE
+		dataType: string
+		lineageTag: 7f3ceccd-3fbc-422f-8a89-c6c8f466ab67
+		sourceColumn: SEMESTRE
+
+	partition dim_tempo = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(PastaSaida & "dim_tempo.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalho, {{"DATA", type date}, {"ANO", Int64.Type}, {"MES", Int64.Type}, {"NOME_MES", type text}, {"TRIMESTRE", type text}, {"SEMESTRE", type text}}, "pt-PT")
+				in
+				    Tipos
+

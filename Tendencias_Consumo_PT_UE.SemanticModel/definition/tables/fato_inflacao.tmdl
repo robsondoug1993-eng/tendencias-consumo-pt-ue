@@ -1,0 +1,45 @@
+table fato_inflacao
+	lineageTag: 6a8b6b9b-c676-40b1-9638-b396814d1aa6
+
+	column ANO
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 21bb3891-418e-4388-ad8e-7fc1bd32489f
+		summarizeBy: none
+		sourceColumn: ANO
+
+	column CO_GEO
+		dataType: string
+		isHidden
+		lineageTag: 6909135d-7c2b-47cf-80ba-543ea2af1394
+		sourceColumn: CO_GEO
+
+	column CO_COICOP
+		dataType: string
+		isHidden
+		lineageTag: 32b85506-29c2-4db4-af64-c5b3433ef3df
+		sourceColumn: CO_COICOP
+
+	column TAXA_INFLACAO_PCT
+		dataType: double
+		lineageTag: a30e04b6-ac7e-4b72-a97e-8ef88c89bee3
+		summarizeBy: none
+		sourceColumn: TAXA_INFLACAO_PCT
+
+	column INDICE_2015
+		dataType: double
+		lineageTag: 7ac83771-19bb-42b0-811f-b5f8427deee8
+		summarizeBy: none
+		sourceColumn: INDICE_2015
+
+	partition fato_inflacao = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(PastaSaida & "fato_inflacao.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalho, {{"ANO", Int64.Type}, {"CO_GEO", type text}, {"CO_COICOP", type text}, {"TAXA_INFLACAO_PCT", type number}, {"INDICE_2015", type number}}, "pt-PT")
+				in
+				    Tipos
+

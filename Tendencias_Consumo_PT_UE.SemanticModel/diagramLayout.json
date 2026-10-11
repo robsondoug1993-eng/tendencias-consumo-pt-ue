@@ -1,0 +1,269 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 1326.7896941209208,
+            "y": 784.35756053661521
+          },
+          "nodeIndex": "_Medidas",
+          "nodeLineageTag": "888abafd-52bc-4b20-a12d-342aedf5554d",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 388.62016026846061,
+            "y": 685.24032053692122
+          },
+          "nodeIndex": "dim_ano",
+          "nodeLineageTag": "98201f2b-cda4-4690-8126-387ee6e16c60",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 870.7367067277462,
+            "y": 1453.2144333003785
+          },
+          "nodeIndex": "dim_atividade",
+          "nodeLineageTag": "123054c9-da2a-4bc2-b509-38b72a82cf03",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 321.3939159292043,
+            "y": 1692.7151210732304
+          },
+          "nodeIndex": "dim_categoria_online",
+          "nodeLineageTag": "4058307d-014b-49f5-8f36-78e21792c264",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 107.4463781029699,
+            "y": 0
+          },
+          "nodeIndex": "dim_coicop",
+          "nodeLineageTag": "34a8fc5a-c89c-4f24-b93b-0f3b6542a1c9",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 442.04994536939284,
+            "y": 1362.0949608047697
+          },
+          "nodeIndex": "dim_dimensao_empresa",
+          "nodeLineageTag": "a1155919-8d25-4100-aeab-4614c2cc34ec",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 488.57005937028009,
+            "y": 306.62016026846055
+          },
+          "nodeIndex": "dim_pais",
+          "nodeLineageTag": "c8497cba-1e4c-4f4b-a9e1-bf0c3c94f258",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 32.061023917660293,
+            "y": 1362.0949608047697
+          },
+          "nodeIndex": "dim_perfil",
+          "nodeLineageTag": "a09078a0-8fd0-4f8b-8a89-c065d8e78575",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 547.1751131785735,
+            "y": 936.879911126991
+          },
+          "nodeIndex": "dim_tempo",
+          "nodeLineageTag": "14c71493-ddec-4b3a-923b-24c36525ca4b",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 114.66450888609205,
+            "y": 983.47480053630909
+          },
+          "nodeIndex": "fato_categorias_online",
+          "nodeLineageTag": "c7f0efe3-3ba3-4276-a0e9-f2da66d9c6c8",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 68.629629130296792,
+            "y": 709.180189250039
+          },
+          "nodeIndex": "fato_compras_online",
+          "nodeLineageTag": "24e69976-cc7f-4449-9fa2-9f9f2444d105",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 877.1902196387407,
+            "y": 393.32648022616854
+          },
+          "nodeIndex": "fato_consumo_familias",
+          "nodeLineageTag": "64ec87ef-3a5b-41bb-beff-ae30babe842c",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 935.79527344703411,
+            "y": 826.3842353235176
+          },
+          "nodeIndex": "fato_estrutura_retalho",
+          "nodeLineageTag": "dc926cdc-76a3-43a8-8d3a-7b290650498a",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 375.57016614606556
+          },
+          "nodeIndex": "fato_inflacao",
+          "nodeLineageTag": "72f06f8d-9b66-4832-8d08-64b76a95e36d",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 935.79527344703411,
+            "y": 1098.5942730319177
+          },
+          "nodeIndex": "fato_vendas_retalho",
+          "nodeLineageTag": "3e519cd7-3961-4ea6-aa0b-0915ff1b6967",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1610.7896941209206,
+            "y": 0
+          },
+          "nodeIndex": "fato_previsao",
+          "nodeLineageTag": "330836fa-2f2d-4d73-841e-1ced28a2c6e8",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2861.1111318387257,
+            "y": 38
+          },
+          "nodeIndex": "fato_projecao_online",
+          "nodeLineageTag": "5143cc3e-0c61-4377-a56c-f734b2a7decc",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2444.3373192661238,
+            "y": 2
+          },
+          "nodeIndex": "previsao_metricas",
+          "nodeLineageTag": "ad1e803b-3b53-4061-b782-885cf5c6c2b2",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2027.5635066935222,
+            "y": 0
+          },
+          "nodeIndex": "previsao_resumo_anual",
+          "nodeLineageTag": "cf39b96b-b236-432f-8eed-47234009fff0",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas as tabelas",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas as tabelas",
+  "defaultDiagram": "Todas as tabelas"
+}

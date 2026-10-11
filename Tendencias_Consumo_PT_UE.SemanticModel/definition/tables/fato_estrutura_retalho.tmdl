@@ -1,0 +1,62 @@
+table fato_estrutura_retalho
+	lineageTag: 6ed71cda-92bc-450f-a402-6906a9246e39
+
+	column ANO
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ed40cac6-af2b-48fb-9da5-62636844c21c
+		summarizeBy: none
+		sourceColumn: ANO
+
+	column CO_GEO
+		dataType: string
+		isHidden
+		lineageTag: 4644e775-5d8c-4f4b-bf63-ecc52e0b4004
+		sourceColumn: CO_GEO
+
+	column CO_NACE
+		dataType: string
+		isHidden
+		lineageTag: a43f9bf9-d20a-4d85-bdc1-f5a97bb47fdd
+		sourceColumn: CO_NACE
+
+	column CO_DIMENSAO
+		dataType: string
+		isHidden
+		lineageTag: c49d07ec-5c81-4790-9bac-69c33e21926a
+		sourceColumn: CO_DIMENSAO
+
+	column N_EMPRESAS
+		dataType: int64
+		lineageTag: 13a458b2-a394-4b50-9563-a28284c95821
+		summarizeBy: none
+		sourceColumn: N_EMPRESAS
+
+	column N_PESSOAS
+		dataType: int64
+		lineageTag: b78f25d4-ceee-4b38-b747-4ba370a4a685
+		summarizeBy: none
+		sourceColumn: N_PESSOAS
+
+	column VOLUME_NEGOCIOS_MEUR
+		dataType: double
+		lineageTag: ba4ac5ad-2cfd-486c-9192-8671bf72b285
+		summarizeBy: none
+		sourceColumn: VOLUME_NEGOCIOS_MEUR
+
+	column SERIE
+		dataType: string
+		lineageTag: c5c8b56d-f858-4379-ae8e-48cb394b277a
+		sourceColumn: SERIE
+
+	partition fato_estrutura_retalho = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(PastaSaida & "fato_estrutura_retalho.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalho, {{"ANO", Int64.Type}, {"CO_GEO", type text}, {"CO_NACE", type text}, {"CO_DIMENSAO", type text}, {"N_EMPRESAS", Int64.Type}, {"N_PESSOAS", Int64.Type}, {"VOLUME_NEGOCIOS_MEUR", type number}, {"SERIE", type text}}, "pt-PT")
+				in
+				    Tipos
+

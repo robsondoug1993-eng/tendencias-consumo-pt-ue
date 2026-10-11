@@ -1,0 +1,47 @@
+table fato_projecao_online
+	lineageTag: 5143cc3e-0c61-4377-a56c-f734b2a7decc
+
+	column ANO
+		dataType: int64
+		formatString: 0
+		lineageTag: b425360c-5506-436e-b2f9-7b99ee487694
+		summarizeBy: none
+		sourceColumn: ANO
+
+	column CO_GEO
+		dataType: string
+		lineageTag: cb2a25aa-8f29-467c-b7af-4afe7c332d36
+		sourceColumn: CO_GEO
+
+	column NO_GEO
+		dataType: string
+		lineageTag: 34dae5f2-5fa8-4061-805e-6284becd19c9
+		sourceColumn: NO_GEO
+
+	column TIPO
+		dataType: string
+		lineageTag: 135ced38-3ae7-4be1-9183-96630935e13d
+		sourceColumn: TIPO
+
+	column PCT_COMPROU_12M
+		dataType: double
+		lineageTag: f141686e-848b-4ef0-a660-794428af26a3
+		summarizeBy: none
+		sourceColumn: PCT_COMPROU_12M
+
+	column CURVA
+		dataType: double
+		lineageTag: 21b7d136-03a8-45da-bc67-036e60047c35
+		summarizeBy: none
+		sourceColumn: CURVA
+
+	partition fato_projecao_online = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(PastaSaida & "fato_projecao_online.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalho, {{"ANO", Int64.Type}, {"CO_GEO", type text}, {"NO_GEO", type text}, {"TIPO", type text}, {"PCT_COMPROU_12M", type number}, {"CURVA", type number}}, "pt-PT")
+				in
+				    Tipos
+

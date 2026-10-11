@@ -1,0 +1,51 @@
+table fato_categorias_online
+	lineageTag: 6d22d7e1-66d4-4d9f-adb5-ef4afb71c076
+
+	column ANO
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 2ce480f9-325e-4688-9f02-b661beb86c29
+		summarizeBy: none
+		sourceColumn: ANO
+
+	column CO_GEO
+		dataType: string
+		isHidden
+		lineageTag: d10ffa89-eb98-45ab-893b-a4995c236eb4
+		sourceColumn: CO_GEO
+
+	column CO_PERFIL
+		dataType: string
+		isHidden
+		lineageTag: efdc027e-2669-43a3-a74a-ea0e92bdc582
+		sourceColumn: CO_PERFIL
+
+	column CO_CATEGORIA
+		dataType: string
+		isHidden
+		lineageTag: 0f8b6d5c-6cf9-4ff3-bfb3-7e76c3fa17a6
+		sourceColumn: CO_CATEGORIA
+
+	column PCT_INDIVIDUOS
+		dataType: double
+		lineageTag: e201c3b4-44ea-40ed-bd26-f0aa62b49811
+		summarizeBy: none
+		sourceColumn: PCT_INDIVIDUOS
+
+	column PCT_COMPRADORES
+		dataType: double
+		lineageTag: 69b2dfe3-1631-4db6-9a83-750843b33980
+		summarizeBy: none
+		sourceColumn: PCT_COMPRADORES
+
+	partition fato_categorias_online = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(PastaSaida & "fato_categorias_online.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalho, {{"ANO", Int64.Type}, {"CO_GEO", type text}, {"CO_PERFIL", type text}, {"CO_CATEGORIA", type text}, {"PCT_INDIVIDUOS", type number}, {"PCT_COMPRADORES", type number}}, "pt-PT")
+				in
+				    Tipos
+

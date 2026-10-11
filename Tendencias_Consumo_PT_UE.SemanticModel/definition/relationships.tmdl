@@ -1,0 +1,84 @@
+relationship r_fato_vendas_retalho_DATA
+	fromColumn: fato_vendas_retalho.DATA
+	toColumn: dim_tempo.DATA
+
+relationship r_fato_vendas_retalho_CO_GEO
+	fromColumn: fato_vendas_retalho.CO_GEO
+	toColumn: dim_pais.CO_GEO
+
+relationship r_fato_vendas_retalho_CO_NACE
+	fromColumn: fato_vendas_retalho.CO_NACE
+	toColumn: dim_atividade.CO_NACE
+
+relationship r_dim_tempo_ANO
+	fromColumn: dim_tempo.ANO
+	toColumn: dim_ano.ANO
+
+relationship r_fato_compras_online_ANO
+	fromColumn: fato_compras_online.ANO
+	toColumn: dim_ano.ANO
+
+relationship r_fato_compras_online_CO_GEO
+	fromColumn: fato_compras_online.CO_GEO
+	toColumn: dim_pais.CO_GEO
+
+relationship r_fato_compras_online_CO_PERFIL
+	fromColumn: fato_compras_online.CO_PERFIL
+	toColumn: dim_perfil.CO_PERFIL
+
+relationship r_fato_categorias_online_ANO
+	fromColumn: fato_categorias_online.ANO
+	toColumn: dim_ano.ANO
+
+relationship r_fato_categorias_online_CO_GEO
+	fromColumn: fato_categorias_online.CO_GEO
+	toColumn: dim_pais.CO_GEO
+
+relationship r_fato_categorias_online_CO_PERFIL
+	fromColumn: fato_categorias_online.CO_PERFIL
+	toColumn: dim_perfil.CO_PERFIL
+
+relationship r_fato_categorias_online_CO_CATEGORIA
+	fromColumn: fato_categorias_online.CO_CATEGORIA
+	toColumn: dim_categoria_online.CO_CATEGORIA
+
+relationship r_fato_estrutura_retalho_ANO
+	fromColumn: fato_estrutura_retalho.ANO
+	toColumn: dim_ano.ANO
+
+relationship r_fato_estrutura_retalho_CO_GEO
+	fromColumn: fato_estrutura_retalho.CO_GEO
+	toColumn: dim_pais.CO_GEO
+
+relationship r_fato_estrutura_retalho_CO_NACE
+	fromColumn: fato_estrutura_retalho.CO_NACE
+	toColumn: dim_atividade.CO_NACE
+
+relationship r_fato_estrutura_retalho_CO_DIMENSAO
+	fromColumn: fato_estrutura_retalho.CO_DIMENSAO
+	toColumn: dim_dimensao_empresa.CO_DIMENSAO
+
+relationship r_fato_inflacao_ANO
+	fromColumn: fato_inflacao.ANO
+	toColumn: dim_ano.ANO
+
+relationship r_fato_inflacao_CO_GEO
+	fromColumn: fato_inflacao.CO_GEO
+	toColumn: dim_pais.CO_GEO
+
+relationship r_fato_inflacao_CO_COICOP
+	fromColumn: fato_inflacao.CO_COICOP
+	toColumn: dim_coicop.CO_COICOP
+
+relationship r_fato_consumo_familias_ANO
+	fromColumn: fato_consumo_familias.ANO
+	toColumn: dim_ano.ANO
+
+relationship r_fato_consumo_familias_CO_GEO
+	fromColumn: fato_consumo_familias.CO_GEO
+	toColumn: dim_pais.CO_GEO
+
+relationship r_fato_consumo_familias_CO_COICOP
+	fromColumn: fato_consumo_familias.CO_COICOP
+	toColumn: dim_coicop.CO_COICOP
+

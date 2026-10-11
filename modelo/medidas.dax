@@ -1,0 +1,230 @@
+## Índice de volume | 0.0 | 1. Vendas do retalho
+-- Média do índice de volume (base 2021). Sem atividade filtrada, usa o retalho total (G47).
+IF (
+    ISFILTERED ( dim_atividade ),
+    AVERAGE ( fato_vendas_retalho[IDX_VOLUME] ),
+    CALCULATE ( AVERAGE ( fato_vendas_retalho[IDX_VOLUME] ), dim_atividade[CO_NACE] = "G47" )
+)
+
+## Índice de valor | 0.0 | 1. Vendas do retalho
+IF (
+    ISFILTERED ( dim_atividade ),
+    AVERAGE ( fato_vendas_retalho[IDX_VALOR] ),
+    CALCULATE ( AVERAGE ( fato_vendas_retalho[IDX_VALOR] ), dim_atividade[CO_NACE] = "G47" )
+)
+
+## Variação de preços desde 2021 % | 0.0% | 1. Vendas do retalho
+-- Valor / volume: quanto do crescimento em euros é só preço (deflator implícito).
+DIVIDE ( [Índice de valor], [Índice de volume] ) - 1
+
+## Volume vs 2019 % | +0.0%;-0.0%;0.0% | 1. Vendas do retalho
+-- Compara com a média de 2019 (último ano antes da pandemia).
+VAR base =
+    CALCULATE ( [Índice de volume], REMOVEFILTERS ( dim_tempo ), REMOVEFILTERS ( dim_ano ), dim_ano[ANO] = 2019 )
+RETURN
+    IF ( NOT ISBLANK ( base ), DIVIDE ( [Índice de volume], base ) - 1 )
+
+## Volume var. homóloga % | +0.0%;-0.0%;0.0% | 1. Vendas do retalho
+-- Mesmo(s) mês(es) do ano anterior; funciona para mês, trimestre ou ano.
+VAR datasAnt =
+    SELECTCOLUMNS ( VALUES ( dim_tempo[DATA] ), "DataAnt", EDATE ( dim_tempo[DATA], -12 ) )
+VAR ant =
+    CALCULATE ( [Índice de volume], REMOVEFILTERS ( dim_tempo ), REMOVEFILTERS ( dim_ano ), TREATAS ( datasAnt, dim_tempo[DATA] ) )
+RETURN
+    IF ( NOT ISBLANK ( ant ), DIVIDE ( [Índice de volume], ant ) - 1 )
+
+## Volume · Online | 0.0 | 1. Vendas do retalho\Por canal
+CALCULATE ( [Índice de volume], dim_atividade[CO_NACE] = "G4791" )
+
+## Volume · Retalho total | 0.0 | 1. Vendas do retalho\Por canal
+CALCULATE ( [Índice de volume], dim_atividade[CO_NACE] = "G47" )
+
+## Volume · Super e hipermercados | 0.0 | 1. Vendas do retalho\Por canal
+CALCULATE ( [Índice de volume], dim_atividade[CO_NACE] = "G4711" )
+
+## Volume · Comércio alimentar especializado | 0.0 | 1. Vendas do retalho\Por canal
+CALCULATE ( [Índice de volume], dim_atividade[CO_NACE] = "G472" )
+
+## Volume · Mercados e feiras | 0.0 | 1. Vendas do retalho\Por canal
+CALCULATE ( [Índice de volume], dim_atividade[CO_NACE] = "G478" )
+
+## Online vs retalho desde 2019 (pp) | +0.0;-0.0;0.0 | 1. Vendas do retalho\Por canal
+-- Quantos pontos percentuais o online cresceu acima (ou abaixo) do retalho total desde 2019.
+(
+    CALCULATE ( [Volume vs 2019 %], dim_atividade[CO_NACE] = "G4791" )
+        - CALCULATE ( [Volume vs 2019 %], dim_atividade[CO_NACE] = "G47" )
+) * 100
+
+## % comprou online (12 meses) | 0.0% | 2. Compras online
+-- % de pessoas (16-74) com compra online nos últimos 12 meses. Sem perfil filtrado, usa o total.
+IF (
+    ISFILTERED ( dim_perfil ),
+    AVERAGE ( fato_compras_online[PCT_COMPROU_12M] ),
+    CALCULATE ( AVERAGE ( fato_compras_online[PCT_COMPROU_12M] ), dim_perfil[CO_PERFIL] = "IND_TOTAL" )
+) / 100
+
+## % comprou online (3 meses) | 0.0% | 2. Compras online
+IF (
+    ISFILTERED ( dim_perfil ),
+    AVERAGE ( fato_compras_online[PCT_COMPROU_3M] ),
+    CALCULATE ( AVERAGE ( fato_compras_online[PCT_COMPROU_3M] ), dim_perfil[CO_PERFIL] = "IND_TOTAL" )
+) / 100
+
+## % online · Portugal | 0.0% | 2. Compras online
+CALCULATE ( [% comprou online (12 meses)], REMOVEFILTERS ( dim_pais ), dim_pais[CO_GEO] = "PT" )
+
+## % online · UE27 | 0.0% | 2. Compras online
+CALCULATE ( [% comprou online (12 meses)], REMOVEFILTERS ( dim_pais ), dim_pais[CO_GEO] = "EU27_2020" )
+
+## Diferença PT vs UE (pp) | +0.0;-0.0;0.0 | 2. Compras online
+( [% online · Portugal] - [% online · UE27] ) * 100
+
+## Online var. vs ano anterior (pp) | +0.0;-0.0;0.0 | 2. Compras online
+VAR a = MAX ( dim_ano[ANO] )
+VAR ant =
+    CALCULATE ( [% comprou online (12 meses)], REMOVEFILTERS ( dim_ano ), dim_ano[ANO] = a - 1 )
+RETURN
+    IF ( NOT ISBLANK ( ant ), ( [% comprou online (12 meses)] - ant ) * 100 )
+
+## Ranking UE · compras online | 0 | 2. Compras online
+-- Posição do país selecionado entre os 27 (1 = mais compras online).
+IF (
+    HASONEVALUE ( dim_pais[CO_GEO] ) && SELECTEDVALUE ( dim_pais[TIPO] ) = "País",
+    RANKX (
+        FILTER ( ALL ( dim_pais ), dim_pais[TIPO] = "País" ),
+        [% comprou online (12 meses)], , DESC, Dense
+    )
+)
+
+## % pessoas que compraram (categoria) | 0.0% | 3. Categorias online
+-- % de todas as pessoas que compraram a categoria online nos últimos 3 meses.
+IF (
+    ISFILTERED ( dim_perfil ),
+    AVERAGE ( fato_categorias_online[PCT_INDIVIDUOS] ),
+    CALCULATE ( AVERAGE ( fato_categorias_online[PCT_INDIVIDUOS] ), dim_perfil[CO_PERFIL] = "IND_TOTAL" )
+) / 100
+
+## % dos compradores online (categoria) | 0.0% | 3. Categorias online
+-- Entre quem comprou online nos últimos 3 meses, % que comprou a categoria.
+IF (
+    ISFILTERED ( dim_perfil ),
+    AVERAGE ( fato_categorias_online[PCT_COMPRADORES] ),
+    CALCULATE ( AVERAGE ( fato_categorias_online[PCT_COMPRADORES] ), dim_perfil[CO_PERFIL] = "IND_TOTAL" )
+) / 100
+
+## % pessoas · último ano disponível | 0.0% | 3. Categorias online
+-- Os bens são inquiridos até 2024 e alguns serviços só em anos alternados:
+-- usa o último ano com dado dentro do período filtrado, categoria a categoria.
+VAR ult = MAX ( fato_categorias_online[ANO] )
+RETURN
+    CALCULATE ( [% pessoas que compraram (categoria)], REMOVEFILTERS ( dim_ano ), dim_ano[ANO] = ult )
+
+## Nº de empresas | #,##0 | 4. Estrutura do retalho
+-- Sem atividade filtrada, usa o retalho total (G47) para não somar níveis diferentes.
+IF (
+    ISFILTERED ( dim_atividade ),
+    SUM ( fato_estrutura_retalho[N_EMPRESAS] ),
+    CALCULATE ( SUM ( fato_estrutura_retalho[N_EMPRESAS] ), dim_atividade[CO_NACE] = "G47" )
+)
+
+## Pessoas ao serviço | #,##0 | 4. Estrutura do retalho
+IF (
+    ISFILTERED ( dim_atividade ),
+    SUM ( fato_estrutura_retalho[N_PESSOAS] ),
+    CALCULATE ( SUM ( fato_estrutura_retalho[N_PESSOAS] ), dim_atividade[CO_NACE] = "G47" )
+)
+
+## Volume de negócios (M€) | #,##0 | 4. Estrutura do retalho
+IF (
+    ISFILTERED ( dim_atividade ),
+    SUM ( fato_estrutura_retalho[VOLUME_NEGOCIOS_MEUR] ),
+    CALCULATE ( SUM ( fato_estrutura_retalho[VOLUME_NEGOCIOS_MEUR] ), dim_atividade[CO_NACE] = "G47" )
+)
+
+## % das empresas | 0.0% | 4. Estrutura do retalho
+DIVIDE ( [Nº de empresas], CALCULATE ( [Nº de empresas], REMOVEFILTERS ( dim_dimensao_empresa ) ) )
+
+## % do volume de negócios | 0.0% | 4. Estrutura do retalho
+DIVIDE ( [Volume de negócios (M€)], CALCULATE ( [Volume de negócios (M€)], REMOVEFILTERS ( dim_dimensao_empresa ) ) )
+
+## % das pessoas ao serviço | 0.0% | 4. Estrutura do retalho
+DIVIDE ( [Pessoas ao serviço], CALCULATE ( [Pessoas ao serviço], REMOVEFILTERS ( dim_dimensao_empresa ) ) )
+
+## Volume de negócios por empresa (mil €) | #,##0 | 4. Estrutura do retalho
+DIVIDE ( [Volume de negócios (M€)] * 1000, [Nº de empresas] )
+
+## Quota das grandes empresas no VN % | 0.0% | 4. Estrutura do retalho
+CALCULATE ( [% do volume de negócios], dim_dimensao_empresa[CO_DIMENSAO] = "GRANDE" )
+
+## Quota das microempresas no VN % | 0.0% | 4. Estrutura do retalho
+CALCULATE ( [% do volume de negócios], dim_dimensao_empresa[CO_DIMENSAO] = "MICRO" )
+
+## Nº de empresas vs 2010 % | +0.0%;-0.0%;0.0% | 4. Estrutura do retalho
+VAR base =
+    CALCULATE ( [Nº de empresas], REMOVEFILTERS ( dim_ano ), dim_ano[ANO] = 2010 )
+RETURN
+    IF ( NOT ISBLANK ( base ), DIVIDE ( [Nº de empresas], base ) - 1 )
+
+## Inflação anual % | 0.0% | 5. Preços e consumo
+-- Taxa de variação média anual do IHPC. Sem categoria filtrada, usa o total (CP00).
+IF (
+    ISFILTERED ( dim_coicop ),
+    AVERAGE ( fato_inflacao[TAXA_INFLACAO_PCT] ),
+    CALCULATE ( AVERAGE ( fato_inflacao[TAXA_INFLACAO_PCT] ), dim_coicop[CO_COICOP] = "CP00" )
+) / 100
+
+## Índice de preços (2015 = 100) | 0.0 | 5. Preços e consumo
+IF (
+    ISFILTERED ( dim_coicop ),
+    AVERAGE ( fato_inflacao[INDICE_2015] ),
+    CALCULATE ( AVERAGE ( fato_inflacao[INDICE_2015] ), dim_coicop[CO_COICOP] = "CP00" )
+)
+
+## Inflação acumulada desde 2021 % | 0.0% | 5. Preços e consumo
+-- Subida de preços entre 2021 e o último ano selecionado.
+VAR a = MAX ( dim_ano[ANO] )
+VAR base =
+    CALCULATE ( [Índice de preços (2015 = 100)], REMOVEFILTERS ( dim_ano ), dim_ano[ANO] = 2021 )
+VAR atual =
+    CALCULATE ( [Índice de preços (2015 = 100)], REMOVEFILTERS ( dim_ano ), dim_ano[ANO] = a )
+RETURN
+    IF ( NOT ISBLANK ( base ) && NOT ISBLANK ( atual ), DIVIDE ( atual, base ) - 1 )
+
+## Despesa das famílias (M€) | #,##0 | 5. Preços e consumo
+IF (
+    ISFILTERED ( dim_coicop ),
+    SUM ( fato_consumo_familias[DESPESA_MEUR] ),
+    CALCULATE ( SUM ( fato_consumo_familias[DESPESA_MEUR] ), dim_coicop[CO_COICOP] = "CP00" )
+)
+
+## Peso na despesa % | 0.0% | 5. Preços e consumo
+-- Peso da categoria no total da despesa das famílias.
+IF (
+    ISFILTERED ( dim_coicop ),
+    AVERAGE ( fato_consumo_familias[PESO_PCT] ),
+    CALCULATE ( AVERAGE ( fato_consumo_familias[PESO_PCT] ), dim_coicop[CO_COICOP] = "CP00" )
+) / 100
+
+## Variação real do consumo % | +0.0%;-0.0%;0.0% | 5. Preços e consumo
+-- Variação em volume (descontada a inflação) face ao ano anterior.
+IF (
+    ISFILTERED ( dim_coicop ),
+    AVERAGE ( fato_consumo_familias[VAR_REAL_PCT] ),
+    CALCULATE ( AVERAGE ( fato_consumo_familias[VAR_REAL_PCT] ), dim_coicop[CO_COICOP] = "CP00" )
+) / 100
+
+## Despesa por habitante (€) | #,##0 | 5. Preços e consumo
+IF (
+    ISFILTERED ( dim_coicop ),
+    SUM ( fato_consumo_familias[DESPESA_EUR_HAB] ),
+    CALCULATE ( SUM ( fato_consumo_familias[DESPESA_EUR_HAB] ), dim_coicop[CO_COICOP] = "CP00" )
+)
+
+## Cor de destaque | General | 6. Formatação
+-- Usar em formatação condicional (fx > Valor do campo): Portugal em destaque, UE27 em cinzento escuro.
+SWITCH (
+    SELECTEDVALUE ( dim_pais[DESTAQUE] ),
+    "Portugal", "#0E7C66",
+    "UE27", "#4A4A4A",
+    "#C9CED6"
+)

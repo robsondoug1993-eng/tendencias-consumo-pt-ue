@@ -1,0 +1,37 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_ProTooling = ["TMDLView_Desktop","DaxQueryView_Desktop","DevMode"]
+
+annotation PBI_QueryOrder = ["dim_ano","dim_tempo","dim_pais","dim_atividade","dim_perfil","dim_categoria_online","dim_dimensao_empresa","dim_coicop","fato_vendas_retalho","fato_compras_online","fato_categorias_online","fato_estrutura_retalho","fato_inflacao","fato_consumo_familias","fato_previsao","previsao_resumo_anual","fato_projecao_online","previsao_metricas","_Medidas","PastaSaida"]
+
+ref table dim_ano
+ref table dim_tempo
+ref table dim_pais
+ref table dim_atividade
+ref table dim_perfil
+ref table dim_categoria_online
+ref table dim_dimensao_empresa
+ref table dim_coicop
+ref table fato_vendas_retalho
+ref table fato_compras_online
+ref table fato_categorias_online
+ref table fato_estrutura_retalho
+ref table fato_inflacao
+ref table fato_consumo_familias
+ref table _Medidas
+ref table fato_previsao
+ref table previsao_resumo_anual
+ref table fato_projecao_online
+ref table previsao_metricas
+
+ref cultureInfo pt-BR
+

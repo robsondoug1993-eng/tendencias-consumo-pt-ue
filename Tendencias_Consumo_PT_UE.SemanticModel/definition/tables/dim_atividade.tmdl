@@ -1,0 +1,42 @@
+table dim_atividade
+	lineageTag: 8b99a5e4-908a-425f-8f48-2bf16622637e
+
+	column CO_NACE
+		dataType: string
+		lineageTag: 13cf36b9-aefa-478e-a937-ab3f11c2ca21
+		sourceColumn: CO_NACE
+
+	column NO_ATIVIDADE
+		dataType: string
+		lineageTag: 2154d9ec-073d-4948-966d-f9f34932fe83
+		sourceColumn: NO_ATIVIDADE
+		sortByColumn: ORDEM
+
+	column CANAL
+		dataType: string
+		lineageTag: 03842f5c-6fbc-4ac0-8e07-dc7998231e78
+		sourceColumn: CANAL
+
+	column NIVEL
+		dataType: int64
+		lineageTag: c6ede789-89a2-4ae4-9be1-c8630933214f
+		summarizeBy: none
+		sourceColumn: NIVEL
+
+	column ORDEM
+		dataType: int64
+		isHidden
+		lineageTag: 8bfae029-56ee-4bd2-8633-1772620e6888
+		summarizeBy: none
+		sourceColumn: ORDEM
+
+	partition dim_atividade = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(PastaSaida & "dim_atividade.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalho, {{"CO_NACE", type text}, {"NO_ATIVIDADE", type text}, {"CANAL", type text}, {"NIVEL", Int64.Type}, {"ORDEM", Int64.Type}}, "pt-PT")
+				in
+				    Tipos
+

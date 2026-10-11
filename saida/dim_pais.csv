@@ -1,0 +1,29 @@
+﻿CO_GEO;NO_PAIS;ISO3;ZONA_EURO;TIPO;DESTAQUE
+AT;Áustria;AUT;Sim;País;Outros
+BE;Bélgica;BEL;Sim;País;Outros
+BG;Bulgária;BGR;Não;País;Outros
+HR;Croácia;HRV;Sim;País;Outros
+CY;Chipre;CYP;Sim;País;Outros
+CZ;Chéquia;CZE;Não;País;Outros
+DK;Dinamarca;DNK;Não;País;Outros
+EE;Estónia;EST;Sim;País;Outros
+FI;Finlândia;FIN;Sim;País;Outros
+FR;França;FRA;Sim;País;Outros
+DE;Alemanha;DEU;Sim;País;Outros
+EL;Grécia;GRC;Sim;País;Outros
+HU;Hungria;HUN;Não;País;Outros
+IE;Irlanda;IRL;Sim;País;Outros
+IT;Itália;ITA;Sim;País;Outros
+LV;Letónia;LVA;Sim;País;Outros
+LT;Lituânia;LTU;Sim;País;Outros
+LU;Luxemburgo;LUX;Sim;País;Outros
+MT;Malta;MLT;Sim;País;Outros
+NL;Países Baixos;NLD;Sim;País;Outros
+PL;Polónia;POL;Não;País;Outros
+PT;Portugal;PRT;Sim;País;Portugal
+RO;Roménia;ROU;Não;País;Outros
+SK;Eslováquia;SVK;Sim;País;Outros
+SI;Eslovénia;SVN;Sim;País;Outros
+ES;Espanha;ESP;Sim;País;Outros
+SE;Suécia;SWE;Não;País;Outros
+EU27_2020;União Europeia (27);EU27;Não;Agregado;UE27

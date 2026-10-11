@@ -1,0 +1,43 @@
+table dim_pais
+	lineageTag: fbaf2fea-ad75-46e9-b2e7-0e1febce9033
+
+	column CO_GEO
+		dataType: string
+		lineageTag: 0c240453-a70d-44ba-b510-da973da39c24
+		sourceColumn: CO_GEO
+
+	column NO_PAIS
+		dataType: string
+		lineageTag: 94dabc6a-6230-4cd9-9098-7b2239469ae2
+		sourceColumn: NO_PAIS
+
+	column ISO3
+		dataType: string
+		lineageTag: c6d283ab-5b24-4776-8eeb-568905884ab5
+		sourceColumn: ISO3
+
+	column ZONA_EURO
+		dataType: string
+		lineageTag: 923ca5aa-1c42-4e79-b93c-4189592849af
+		sourceColumn: ZONA_EURO
+
+	column TIPO
+		dataType: string
+		lineageTag: e172de95-b2d8-4643-a31c-1613239fe3a8
+		sourceColumn: TIPO
+
+	column DESTAQUE
+		dataType: string
+		lineageTag: 359cd287-48f7-4ef4-8d38-45262ccbcec1
+		sourceColumn: DESTAQUE
+
+	partition dim_pais = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(PastaSaida & "dim_pais.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalho, {{"CO_GEO", type text}, {"NO_PAIS", type text}, {"ISO3", type text}, {"ZONA_EURO", type text}, {"TIPO", type text}, {"DESTAQUE", type text}}, "pt-PT")
+				in
+				    Tipos
+

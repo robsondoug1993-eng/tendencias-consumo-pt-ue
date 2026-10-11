@@ -1,0 +1,31 @@
+table dim_dimensao_empresa
+	lineageTag: a491c3d3-ac62-42ef-af31-c2dec5c6a401
+
+	column CO_DIMENSAO
+		dataType: string
+		lineageTag: fb786e44-084b-4219-b204-a8001b608c36
+		sourceColumn: CO_DIMENSAO
+
+	column NO_DIMENSAO
+		dataType: string
+		lineageTag: 19908d08-44c5-489f-9cf2-4c693b6d6fc1
+		sourceColumn: NO_DIMENSAO
+		sortByColumn: ORDEM
+
+	column ORDEM
+		dataType: int64
+		isHidden
+		lineageTag: 730bceea-66f5-43f3-b20e-de5355ed2504
+		summarizeBy: none
+		sourceColumn: ORDEM
+
+	partition dim_dimensao_empresa = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(PastaSaida & "dim_dimensao_empresa.csv"), [Delimiter=";", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    Tipos = Table.TransformColumnTypes(Cabecalho, {{"CO_DIMENSAO", type text}, {"NO_DIMENSAO", type text}, {"ORDEM", Int64.Type}}, "pt-PT")
+				in
+				    Tipos
+

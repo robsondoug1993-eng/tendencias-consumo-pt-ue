@@ -1,0 +1,71 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "p1_conclusoes",
+  "position": {
+    "x": 24,
+    "y": 786,
+    "z": 30,
+    "height": 250,
+    "width": 1872,
+    "tabOrder": 30
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Principais conclusões",
+                    "textStyle": {
+                      "fontSize": "14pt",
+                      "color": "#1F2937",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "1. O online cresceu, mas Portugal continua atrás: os compradores online passaram de 15% (2010) para 61% (2025), mas o país está em 23º na UE, 13 pp abaixo da média, com grande fosso por idade e escolaridade.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#1F2937"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "2. Quem ganhou foram as grandes superfícies, não o comércio local: desde 2019 os super e hipermercados cresceram 19% em volume, enquanto as lojas alimentares especializadas caíram 5%.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#1F2937"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "3. O retalho concentrou-se: há menos 30 mil empresas do que em 2010, quase todas micro; as 97 grandes empresas faturam 44% do total.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#1F2937"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

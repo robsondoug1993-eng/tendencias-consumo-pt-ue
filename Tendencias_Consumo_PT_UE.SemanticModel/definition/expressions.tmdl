@@ -1,0 +1,5 @@
+expression PastaSaida = "C:\Users\Robson\Desktop\Projetos\Tendencias_Consumo_PT_UE\saida\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 871ac104-2148-47b6-b056-e342f1e3e82b
+
+	annotation PBI_ResultType = Text
+
